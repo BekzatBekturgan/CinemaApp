@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-val APP_PREFERENCES = "mysettings" // имя файла для shared preferences
+val APP_PREFERENCES = "mysettings" // name of the file to shared preferences
 val TOKEN_KEY = "token"
 lateinit var pref: SharedPreferences
 // check the branches

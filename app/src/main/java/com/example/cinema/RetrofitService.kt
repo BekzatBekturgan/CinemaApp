@@ -3,6 +3,8 @@ package com.example.cinema
 import android.util.Log
 import com.example.cinema.api.model.Post
 import com.example.cinema.api.service.UserClient
+import com.example.cinema.api.model.MovieResponse
+import com.example.cinema.api.model.MoviesData
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -14,12 +16,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 object RetrofitService {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
-
+    private lateinit var movieApi: MovieApi
     fun getPostApi(): UserClient {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -27,7 +30,15 @@ object RetrofitService {
             .build()
         return retrofit.create(UserClient::class.java)
     }
-
+    fun getMovieApi(): MovieApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(getOkHttp())
+            .build()
+        movieApi =  retrofit.create(MovieApi::class.java)
+        return movieApi
+    }
     private fun getOkHttp(): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -45,5 +56,18 @@ object RetrofitService {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
+    interface MovieApi {
+        @GET("movie/popular")
+        fun getPopularMovies(
+            @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83",
+            @Query("page") page: Int
+        ): Call<MovieResponse>
+
+        @GET("movie/{movie_id}")
+        fun getMovieById(@Path("movie_id") movieId: Int=1,
+                         @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83")
+                :Call<MoviesData>
+    }
+
 }
 

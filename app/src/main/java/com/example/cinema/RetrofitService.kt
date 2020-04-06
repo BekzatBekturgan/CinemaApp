@@ -54,7 +54,7 @@ object RetrofitService {
         @GET("account/{account_id}/favorite/movies")
         fun getFavouriteMovies(
             @Query("api_key") apiKey: String = api_key,
-            @Query("session_id") sessionId: String
+            @Query("session_id") sessionId: Call<SessionId>
         ) : Call<MovieResponse>
     }
 

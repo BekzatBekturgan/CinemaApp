@@ -14,7 +14,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
+import com.example.cinema.api.model.MovieResponse
 
 object RetrofitService {
 
@@ -45,5 +47,14 @@ object RetrofitService {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
+    interface MovieApi {
+
+        @GET("account/{account_id}/favorite/movies")
+        fun getFavouriteMovies(
+            @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83",
+            @Query("session_id") sessionId: String = ""
+        ) : Call<MovieResponse>
+    }
+
 }
 

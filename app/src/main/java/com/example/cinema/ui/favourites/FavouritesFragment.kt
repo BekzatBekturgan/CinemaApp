@@ -69,7 +69,7 @@ class FavouritesFragment : Fragment() {
         })
     }
     private fun inititializeRecyclerView() {
-        recyclerView = rootView.findViewById(R.id.favouritemoviesRecyclerView)
+        recyclerView = rootView.findViewById(R.id.favouriteMoviesRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(
             activity,
             LinearLayoutManager.VERTICAL,

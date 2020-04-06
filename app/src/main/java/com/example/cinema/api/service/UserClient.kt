@@ -12,7 +12,7 @@ interface UserClient {
     @POST("authentication/session/new")
     fun createSession(
         @Query("api_key") apiKey: String = api_key,
-        @Body token: Token
+        @Query("requested_token") token: String = TOKEN_KEY
     ) : Call<SessionId>
 
     @GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")

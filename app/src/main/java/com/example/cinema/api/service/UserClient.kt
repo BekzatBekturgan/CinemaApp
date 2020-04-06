@@ -1,19 +1,22 @@
 package com.example.cinema.api.service
 
+import com.example.cinema.TOKEN_KEY
+import com.example.cinema.api.model.*
 import retrofit2.Call
-import com.example.cinema.api.model.Login
-import com.example.cinema.api.model.Post
-import com.example.cinema.api.model.Token
-import com.example.cinema.api.model.User
 import retrofit2.http.*
 const val api_key = "753b84576c954d96997803298a188f83"
 interface UserClient {
     @POST("authentication/token/validate_with_login?api_key=753b84576c954d96997803298a188f83")
     fun login(@Body login:Login): Call<Token>
+    // create a new session_id
+    @POST("authentication/session/new")
+    fun createSession(
+        @Query("api_key") apiKey: String = api_key,
+        @Body token: Token
+    ) : Call<SessionId>
 
     @GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")
     fun getToken():Call<Token>
-
     @GET("posts")
     fun getPostList(): Call<List<Post>>
     @GET("posts/{id}")

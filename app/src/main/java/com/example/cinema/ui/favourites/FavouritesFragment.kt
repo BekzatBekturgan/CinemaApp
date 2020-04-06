@@ -89,7 +89,7 @@ class FavouritesFragment : Fragment() {
         onError: () -> Unit
 
     ) {
-        RetrofitService.getMovieApi().getFavouriteMovies(page = page)
+        RetrofitService.getMovieApi().getFavouriteMovies()
             .enqueue(object : Callback<MovieResponse> {
                 override fun onResponse(
                     call: Call<MovieResponse>,

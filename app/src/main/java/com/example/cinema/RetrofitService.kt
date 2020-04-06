@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.SessionId
 import com.example.cinema.api.service.api_key
+import retrofit2.http.Body
 
 object RetrofitService {
 
@@ -54,7 +55,7 @@ object RetrofitService {
         @GET("account/{account_id}/favorite/movies")
         fun getFavouriteMovies(
             @Query("api_key") apiKey: String = api_key,
-            @Query("session_id") sessionId: Call<SessionId>
+            @Body sessionId: SessionId
         ) : Call<MovieResponse>
     }
 

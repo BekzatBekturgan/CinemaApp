@@ -16,6 +16,7 @@ import com.example.cinema.ui.movies.MoviesAdapter
 import com.example.cinema.ui.movies.OnItemClickListner
 import com.example.cinema.DetailsActivity
 import com.example.cinema.RetrofitService
+import com.example.cinema.api.model.SessionId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -89,7 +90,7 @@ class FavouritesFragment : Fragment() {
         onError: () -> Unit
 
     ) {
-        RetrofitService.getMovieApi().getFavouriteMovies()
+        RetrofitService.getMovieApi().getFavouriteMovies(Call<SessionId>)
             .enqueue(object : Callback<MovieResponse> {
                 override fun onResponse(
                     call: Call<MovieResponse>,

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:layout_marginStart="3dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="3dp"
+    android:layout_marginRight="5dp"
+    android:background="#00203f "
+    app:cardCornerRadius="4dp"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/item_movie_image"
+                android:layout_width="120dp"
+                android:layout_height="130dp"
+                android:scaleType="matrix"
+                android:src="@drawable/poster_placeholder" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="-83dp"
+                android:tint="#FFFFFF"
+                app:srcCompat="@drawable/icon_play" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="movie"
+                android:textColor="@android:color/background_dark"
+                android:textStyle="bold"
+                tools:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:text="overview" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:text="..." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="0dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/clock_128px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="april 03 , 2020"
+                    android:textSize="13dp" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="1dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="1"
+                    android:tint="#8E8E8E"
+                    app:srcCompat="@drawable/comment_128px" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textSize="13dp" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="60dp"
+                    android:layout_height="17dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

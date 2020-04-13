@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.activity_details.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.awt.font.NumericShaper
+import java.util.*
 
 class DetailsActivity : AppCompatActivity() {
      val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
@@ -47,6 +49,11 @@ class DetailsActivity : AppCompatActivity() {
         movie_runtime = findViewById(R.id.movie_runtime)
         movie_genre = findViewById(R.id.movie_genre)
 
+        val genreArray: Array<String> = arrayOf("  Fantasy ", "  Fantastic  ", "  Adventures  " , "  Comedy  " , "  Thriller  ")
+
+
+        val index = (0..3).random()
+        movie_genre.text=genreArray[index]
         btnBack = findViewById(R.id.buttonBack)
 
         btnBack.setOnClickListener{
@@ -76,7 +83,6 @@ class DetailsActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<MoviesData>, t: Throwable) {
                     Log.e("Error", "Error")
                 }
-
                 override fun onResponse(
                     call: Call<MoviesData>,
                     response: Response<MoviesData>
@@ -90,6 +96,8 @@ class DetailsActivity : AppCompatActivity() {
                             movie_release_date.text = responseBody.releaseDate
                             movie_runtime.text = responseBody.runtime.toString() + " min"
                             movie_revenue.text = responseBody.revenue.toString() + " $"
+
+
                             if(responseBody.rating < 4){
                                 movie_rating.text=responseBody.rating.toString() + " ★"
                             }

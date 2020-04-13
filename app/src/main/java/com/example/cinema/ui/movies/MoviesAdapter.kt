@@ -23,14 +23,11 @@ class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
     }
 
     inner class MoviesViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-
         private val movieImageView = itemView.findViewById<ImageView>(R.id.item_movie_image)
-
 
         init {
             itemView.setOnClickListener(this)
         }
-
         fun bind (movie: MoviesData) {
             itemView.item_movie_title.text = movie?.title
             itemView.overview.text=movie?.overview

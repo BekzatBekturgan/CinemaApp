@@ -53,8 +53,8 @@
                     android:layout_height="18dp"
                     android:layout_marginStart="335dp"
                     android:layout_marginTop="-18dp"
-                    android:background="@drawable/heart"
-                    android:backgroundTint="#FFFFFF" />
+                    android:background="@drawable/heart_white"
+                     />
 
                 <Button
                     android:id="@+id/buttonShare"
@@ -110,7 +110,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:background="#11B0F1"
-                            android:text="  Fantasy  "
+                            android:text="  Thriller  "
                             android:textColor="#FFFFFF" />
 
                         <LinearLayout
@@ -126,7 +126,7 @@
                                 android:textSize="14sp" />
 
                             <ImageView
-                                android:id="@+id/imageView4"
+
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
                                 android:layout_marginStart="138dp"

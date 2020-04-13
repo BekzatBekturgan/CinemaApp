@@ -36,9 +36,7 @@ open class MoviesFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
          onCreateComponent()
-
 
 
     }
@@ -80,6 +78,10 @@ open class MoviesFragment: Fragment() {
                 startActivity(intent)
             }
         })
+        main_layout_pic.setOnClickListener {
+                    val intent = Intent(activity, DetailsJohnWick::class.java)
+                    startActivity(intent)
+        }
     }
 
     private fun inititializeRecyclerView() {

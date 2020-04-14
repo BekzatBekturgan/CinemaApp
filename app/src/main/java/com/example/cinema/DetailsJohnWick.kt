@@ -25,11 +25,10 @@ class DetailsJohnWick : AppCompatActivity() {
     private lateinit var movie_budget: TextView
     private lateinit var movie_revenue: TextView
     private lateinit var btnBack: Button
-        /////////////////////////////////////////////////////
-        //
-        //      Хотел запустить его когда нажимаешь на постер , но чет ошибка выходит , думаю лишним не будет пусть пока что стоит тут
-        //
-        ////////////////////////////////////////////////////
+    private lateinit var LikeView: Button
+    private var liked:Boolean=false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_johnwick)
@@ -40,8 +39,19 @@ class DetailsJohnWick : AppCompatActivity() {
         btnBack.setOnClickListener{
             finish()
         }
+            LikeView = findViewById(R.id.buttonLike)
+            LikeView.setOnClickListener { getLike() }
+    }
+    private fun getLike(){
+        if (liked==false ) {
+            LikeView.setBackgroundResource(R.drawable.heart_red)
+            liked=true
+
+        } else {
+            LikeView.setBackgroundResource(R.drawable.heart_white)
+            liked=false
+        }
 
     }
-
 
 }

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.cinema.DetailsActivity
 import com.example.cinema.DetailsJohnWick
 import com.example.cinema.R
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_movies.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 open class MoviesFragment: Fragment() {
 
@@ -38,7 +40,6 @@ open class MoviesFragment: Fragment() {
 
 
     }
-
 
     private fun onCreateComponent() {
         moviesAdapter = MoviesAdapter()
@@ -77,6 +78,10 @@ open class MoviesFragment: Fragment() {
                 startActivity(intent)
             }
         })
+        main_layout_pic.setOnClickListener {
+                    val intent = Intent(activity, DetailsJohnWick::class.java)
+                    startActivity(intent)
+        }
     }
 
     private fun inititializeRecyclerView() {

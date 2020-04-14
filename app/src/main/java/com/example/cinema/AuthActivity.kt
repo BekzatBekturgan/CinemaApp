@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
 class AuthActivity : AppCompatActivity() {
 

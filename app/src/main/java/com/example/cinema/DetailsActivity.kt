@@ -1,16 +1,11 @@
 package com.example.cinema
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.cinema.api.model.FavMovieInfo
@@ -21,8 +16,6 @@ import kotlinx.android.synthetic.main.activity_details.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.awt.font.NumericShaper
-import java.util.*
 
 class DetailsActivity : AppCompatActivity() {
      val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
@@ -73,26 +66,10 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         LikeView = findViewById(R.id.buttonLike)
-        //LikeView.setOnClickListener { getLike() }
         sessionId = pref.getString("sessionID", "empty")
 
         getMovieById(movieId)
     }
-
-    /*
-    private fun getLike(){
-        if (liked==false ) {
-                LikeView.setBackgroundResource(R.drawable.heart_red)
-            liked=true
-
-        } else {
-                LikeView.setBackgroundResource(R.drawable.heart_white)
-            liked=false
-        }
-
-    }
-
-     */
 
     fun markAsFav(info: FavMovieInfo, sessionId: String?) {
         try {
@@ -112,7 +89,6 @@ class DetailsActivity : AppCompatActivity() {
 
                 })
         } catch (e: Exception) {
-            //Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
             Log.d("mark", e.toString())
         }
     }
@@ -150,7 +126,6 @@ class DetailsActivity : AppCompatActivity() {
             }
             return liked
         } catch (e: Exception) {
-            //Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
             Log.d("mark", e.toString())
         }
         return liked
@@ -178,8 +153,6 @@ class DetailsActivity : AppCompatActivity() {
                             movie_revenue.text = responseBody.revenue.toString() + " $"
                             liked = getState(movieId)
 
-
-
                             if(responseBody.rating < 4){
                                 movie_rating.text=responseBody.rating.toString() + " ★"
                             }
@@ -202,12 +175,6 @@ class DetailsActivity : AppCompatActivity() {
                                 if(liked == false){
                                     liked = true
                                     LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
-                                    /*Toast.makeText(
-                                        activity,
-                                        "Film added to favList",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                     */
                                     markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
                                     LikeView?.refreshDrawableState()
                                 }

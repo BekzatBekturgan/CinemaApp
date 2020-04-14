@@ -1,10 +1,7 @@
 package com.example.cinema
 
 import android.util.Log
-import com.example.cinema.api.model.Post
 import com.example.cinema.api.service.UserClient
-import com.example.cinema.api.model.MovieResponse
-import com.example.cinema.api.model.MoviesData
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred

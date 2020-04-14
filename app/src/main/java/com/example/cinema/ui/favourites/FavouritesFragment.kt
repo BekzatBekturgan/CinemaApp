@@ -1,18 +1,14 @@
 package com.example.cinema.ui.favourites
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -32,10 +28,7 @@ open class FavouritesFragment: Fragment() {
     lateinit var recyclerView: RecyclerView
     private var moviesAdapter: FavouritesAdapter? = null
     private lateinit var rootView: View
-    private lateinit var picture:ImageView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
-    private lateinit var movie_post:ImageView
     var sessionId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,13 +94,6 @@ open class FavouritesFragment: Fragment() {
                 startActivity(intent)
             }
         })
-        /*
-        main_layout_pic.setOnClickListener {
-            val intent = Intent(activity, DetailsJohnWick::class.java)
-            startActivity(intent)
-        }
-
-         */
     }
 
     private fun inititializeRecyclerView() {

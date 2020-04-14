@@ -1,10 +1,7 @@
 package com.example.cinema
 
 import android.util.Log
-import com.example.cinema.api.model.Post
 import com.example.cinema.api.service.UserClient
-import com.example.cinema.api.model.MovieResponse
-import com.example.cinema.api.model.MoviesData
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -23,13 +20,6 @@ object RetrofitService {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     private lateinit var movieApi: UserClient
-    fun getPostApi(): UserClient {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(UserClient::class.java)
-    }
     fun getMovieApi(): UserClient {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)

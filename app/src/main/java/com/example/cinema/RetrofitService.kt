@@ -5,6 +5,8 @@ import com.example.cinema.api.model.Post
 import com.example.cinema.api.service.UserClient
 import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.MoviesData
+import com.example.cinema.api.model.SessionId
+import com.example.cinema.api.service.api_key
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -67,6 +69,11 @@ object RetrofitService {
         fun getMovieById(@Path("movie_id") movieId: Int=1,
                          @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83")
                 :Call<MoviesData>
+
+        @GET("account/{account_id}/favorite/movies?api_key=753b84576c954d96997803298a188f83")
+        fun getFavouriteMovies(
+            @Query("session_id") sessionId: String?
+        ): Call<MovieResponse>
     }
 
 }

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinema.api.model.Login
+import com.example.cinema.api.model.RequestSessionId
 import com.example.cinema.api.model.SessionId
 import com.example.cinema.api.model.Token
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -96,8 +97,10 @@ class AuthActivity : AppCompatActivity() {
 
     fun getSessionId() {
         var token = pref.getString(TOKEN_KEY, "error")
+        var requestSessionId: RequestSessionId =
+            RequestSessionId(token)
         if (token != "error") {
-            var call: Call<SessionId> = RetrofitService.getPostApi().getSessionId()
+            var call: Call<SessionId> = RetrofitService.getPostApi().getSessionId(requestSessionId)
             call.enqueue(object : Callback<SessionId> {
                 override fun onFailure(call: Call<SessionId>, t: Throwable) {
                     Toast.makeText(this@AuthActivity, "ERROR WITH CONNECTION", Toast.LENGTH_SHORT)

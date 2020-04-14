@@ -37,7 +37,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var movie_genre: TextView
 
     private lateinit var btnBack: Button
-    private var liked:Boolean=false
+    private  var liked: Boolean? = null
 
     private lateinit var LikeView: Button
 
@@ -74,7 +74,6 @@ class DetailsActivity : AppCompatActivity() {
 
         LikeView = findViewById(R.id.buttonLike)
         //LikeView.setOnClickListener { getLike() }
-        val pref = getSharedPreferences(TOKEN_KEY, Context.MODE_PRIVATE)
         sessionId = pref.getString("sessionID", "empty")
 
         getMovieById(movieId)
@@ -118,7 +117,7 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
-    fun getState(movieId: Int?): Boolean {
+    fun getState(movieId: Int?): Boolean? {
         try {
             if (movieId != null) {
 
@@ -131,12 +130,19 @@ class DetailsActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<MoviesData?>, response: Response<MoviesData?>) {
                             Log.d("pusk", response.toString())
                             if (response.body()?.id == movieId)
-                                liked = response.body()?.favourite!!
-                            if (liked == true) {
-                                LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                                liked = response.body()?.favorite
 
-                            } else
-                                LikeView?.setBackgroundResource(R.drawable.heart_white)
+                            if (liked == true) {
+                                LikeView.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                                Log.d("liked", "correct")
+
+                            }
+                            else{
+                                LikeView.setBackgroundResource(R.drawable.heart_white)
+                                Log.d("not liked", "wrong")
+                            }
+
+
 
                         }
 
@@ -170,6 +176,7 @@ class DetailsActivity : AppCompatActivity() {
                             movie_release_date.text = responseBody.releaseDate
                             movie_runtime.text = responseBody.runtime.toString() + " min"
                             movie_revenue.text = responseBody.revenue.toString() + " $"
+                            liked = getState(movieId)
 
 
 
@@ -191,9 +198,8 @@ class DetailsActivity : AppCompatActivity() {
                             else if(responseBody.rating > 8 ){
                                 movie_rating.text=responseBody.rating.toString() + " ★★★★★"
                             }
-                            liked = getState(movieId)
-                            LikeView.setOnClickListener(View.OnClickListener {
-                                if(!liked){
+                            LikeView?.setOnClickListener(View.OnClickListener {
+                                if(liked == false){
                                     liked = true
                                     LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
                                     /*Toast.makeText(
@@ -203,13 +209,13 @@ class DetailsActivity : AppCompatActivity() {
                                     ).show()
                                      */
                                     markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
-                                    LikeView.refreshDrawableState()
+                                    LikeView?.refreshDrawableState()
                                 }
                                 else{
                                     liked = false
-                                    LikeView.setBackgroundResource(R.drawable.heart_white)
+                                    LikeView?.setBackgroundResource(R.drawable.heart_white)
                                     markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
-                                    LikeView.refreshDrawableState()
+                                    LikeView?.refreshDrawableState()
                                 }
                             })
                             //  movie_genre.text = " " + responseBody.categories + " "

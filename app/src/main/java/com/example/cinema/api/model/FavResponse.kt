@@ -1,4 +1,6 @@
 package com.example.cinema.api.model
 
-class FavResponse {
-}
+data class FavResponse(
+    val status_code: Int,
+    val status_message: String
+)

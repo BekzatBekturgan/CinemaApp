@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import com.example.cinema.ui.movies.MoviesFragment
 import com.example.cinema.R
+import com.example.cinema.ui.favourites.FavouritesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 val APP_PREFERENCES = "mysettings" // имя файла для shared preferences
@@ -29,12 +30,13 @@ private val  mOnNavigationItemSelected = BottomNavigationView.OnNavigationItemSe
             openFragment(moviesFragment)
             return@OnNavigationItemSelectedListener true
         }
-       /* R.id.navigationFavouriteView -> {
+        R.id.navigationFavouriteView -> {
             textView.text = "Избранное"
             val favouritesFragment: Fragment = FavouritesFragment()
             openFragment(favouritesFragment)
             return@OnNavigationItemSelectedListener true
         }
+        /*
         R.id.navigationProfileView -> {
             textView.text = "Профиль"
             val profileFragment: Fragment = ProfileFragment()

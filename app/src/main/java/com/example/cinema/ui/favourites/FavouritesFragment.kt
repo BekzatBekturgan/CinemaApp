@@ -51,8 +51,10 @@ open class FavouritesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_favourites, container, false)
-        val pref = requireActivity().getSharedPreferences(TOKEN_KEY, Context.MODE_PRIVATE)
         sessionId = pref.getString("sessionID", "empty")
+        Log.d("oncreateviewsessinid",
+            sessionId
+        )
         return rootView
 
     }
@@ -77,10 +79,13 @@ open class FavouritesFragment: Fragment() {
                 startActivity(intent)
             }
         })
+        /*
         main_layout_pic.setOnClickListener {
             val intent = Intent(activity, DetailsJohnWick::class.java)
             startActivity(intent)
         }
+
+         */
     }
 
     private fun inititializeRecyclerView() {
@@ -109,7 +114,7 @@ open class FavouritesFragment: Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
+                        Log.d("get favourite movies", sessionId)
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
 
@@ -135,7 +140,7 @@ open class FavouritesFragment: Fragment() {
     }
 
     private fun onError() {
-        Log.e("Error", "Error")
+        Log.e("Error", sessionId)
     }
 
 }

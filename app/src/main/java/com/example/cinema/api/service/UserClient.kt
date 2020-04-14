@@ -12,8 +12,11 @@ interface UserClient {
     @POST("authentication/session/new?api_key=753b84576c954d96997803298a188f83")
     fun getSessionId(@Body requestSessionId : RequestSessionId): Call<SessionId>
 
-    @GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")
+
+    /*@GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")
     fun getToken():Call<Token>
+
+     */
     @GET("posts")
     fun getPostList(): Call<List<Post>>
     @GET("posts/{id}")

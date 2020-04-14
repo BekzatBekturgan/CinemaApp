@@ -54,6 +54,10 @@ object RetrofitService {
         }
     }
     interface MovieApi {
+
+        @GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")
+        fun getToken():Call<Token>
+
         @GET("movie/popular")
         fun getPopularMovies(
             @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83",

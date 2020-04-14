@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 class AuthActivity : AppCompatActivity() {
 
@@ -49,6 +50,7 @@ class AuthActivity : AppCompatActivity() {
                             //        val bundle = Bundle()
                             //        bundle.putSerializable("item_el", item)
                             //        intent.putExtras(bundle)
+                            Log.d("token response", "success")
                             getSessionId()
                             startActivity(intent)
                         } else {
@@ -71,7 +73,7 @@ class AuthActivity : AppCompatActivity() {
 
     fun getToken() {  //получить токен с сервера
 
-        var call: Call<Token> = RetrofitService.getPostApi().getToken()
+        var call: Call<Token> = RetrofitService.getMovieApi().getToken()
         call.enqueue(object : Callback<Token> {
             override fun onFailure(call: Call<Token>, t: Throwable) {
                 Toast.makeText(this@AuthActivity, "ERROR", Toast.LENGTH_SHORT).show()
@@ -86,6 +88,7 @@ class AuthActivity : AppCompatActivity() {
                         answer!!.request_token
                     )        // кладем полученный токен в shared preferences
                     editor.apply()
+                    Log.d("get token", pref.getString(TOKEN_KEY, answer!!.request_token))
                 } else {
                     Toast.makeText(this@AuthActivity, "Api key is not correct ", Toast.LENGTH_SHORT)
                         .show()
@@ -99,6 +102,7 @@ class AuthActivity : AppCompatActivity() {
         var token = pref.getString(TOKEN_KEY, "error")
         var requestSessionId: RequestSessionId =
             RequestSessionId(token)
+        Log.d("get token on session id", pref.getString(TOKEN_KEY, ""))
         if (token != "error") {
             var call: Call<SessionId> = RetrofitService.getPostApi().getSessionId(requestSessionId)
             call.enqueue(object : Callback<SessionId> {
@@ -109,16 +113,18 @@ class AuthActivity : AppCompatActivity() {
 
                 override fun onResponse(call: Call<SessionId>, response: Response<SessionId>) {
                     if (response.body()?.success == true) {
-                        Log.d("pusk", response.body()?.session_id)
+                        Log.d("pusk2", response.body()?.session_id.toString())
                         val edt = pref.edit()
                         edt.putString("sessionID", response.body()?.session_id)
                         edt.apply()
+                        Log.d("second check", pref.getString("sessionID", "empty 2").toString())
                     } else {
                         Toast.makeText(
                             this@AuthActivity,
                             "Login or password is not correct",
                             Toast.LENGTH_SHORT
                         ).show()
+                        Log.d("session id", response.body()?.session_id)
                     }
                 }
             })

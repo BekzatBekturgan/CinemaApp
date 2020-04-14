@@ -1,13 +1,22 @@
 package com.example.cinema
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.cinema.api.model.FavMovieInfo
+import com.example.cinema.api.model.FavResponse
 import com.example.cinema.api.model.MoviesData
+import com.example.cinema.api.service.api_key
 import kotlinx.android.synthetic.main.activity_details.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,6 +41,8 @@ class DetailsActivity : AppCompatActivity() {
 
     private lateinit var LikeView: Button
 
+    var sessionId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
@@ -49,6 +60,7 @@ class DetailsActivity : AppCompatActivity() {
         movie_runtime = findViewById(R.id.movie_runtime)
         movie_genre = findViewById(R.id.movie_genre)
 
+
         val genreArray: Array<String> = arrayOf("  Fantasy ", "  Fantastic  ", "  Adventures  " , "  Comedy  " , "  Thriller  ")
 
 
@@ -61,11 +73,14 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         LikeView = findViewById(R.id.buttonLike)
-        LikeView.setOnClickListener { getLike() }
-
+        //LikeView.setOnClickListener { getLike() }
+        val pref = getSharedPreferences(TOKEN_KEY, Context.MODE_PRIVATE)
+        sessionId = pref.getString("sessionID", "empty")
 
         getMovieById(movieId)
     }
+
+    /*
     private fun getLike(){
         if (liked==false ) {
                 LikeView.setBackgroundResource(R.drawable.heart_red)
@@ -77,6 +92,65 @@ class DetailsActivity : AppCompatActivity() {
         }
 
     }
+
+     */
+
+    fun markAsFav(info: FavMovieInfo, sessionId: String?) {
+        try {
+                RetrofitService.getMovieApi().addFavList(info, sessionId)
+                ?.enqueue(object : Callback<FavResponse> {
+                    override fun onFailure(call: Call<FavResponse>, t: Throwable) {
+                        Log.d("fav", "lol")
+                    }
+
+                    override fun onResponse(
+                        call: Call<FavResponse>,
+                        response: Response<FavResponse>
+                    ) {
+                        Log.d("pusk", response.toString())
+
+                    }
+
+                })
+        } catch (e: Exception) {
+            //Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
+            Log.d("mark", e.toString())
+        }
+    }
+
+    fun getState(movieId: Int?): Boolean {
+        try {
+            if (movieId != null) {
+
+                    RetrofitService.getMovieApi().getMovieState(movieId, api_key, sessionId)
+                    ?.enqueue(object : Callback<MoviesData?> {
+                        override fun onFailure(call: Call<MoviesData?>, t: Throwable) {
+                            Log.d("fav", "lol")
+                        }
+
+                        override fun onResponse(call: Call<MoviesData?>, response: Response<MoviesData?>) {
+                            Log.d("pusk", response.toString())
+                            if (response.body()?.id == movieId)
+                                liked = response.body()?.favourite!!
+                            if (liked == true) {
+                                LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+
+                            } else
+                                LikeView?.setBackgroundResource(R.drawable.heart_white)
+
+                        }
+
+                    })
+            }
+            return liked
+        } catch (e: Exception) {
+            //Toast.makeText(activity, e.toString(), Toast.LENGTH_SHORT).show()
+            Log.d("mark", e.toString())
+        }
+        return liked
+    }
+
+
     private fun getMovieById(movieId: Int) {
         RetrofitService.getMovieApi().getMovieById(movieId)
             .enqueue(object : Callback<MoviesData> {
@@ -98,6 +172,7 @@ class DetailsActivity : AppCompatActivity() {
                             movie_revenue.text = responseBody.revenue.toString() + " $"
 
 
+
                             if(responseBody.rating < 4){
                                 movie_rating.text=responseBody.rating.toString() + " ★"
                             }
@@ -116,8 +191,27 @@ class DetailsActivity : AppCompatActivity() {
                             else if(responseBody.rating > 8 ){
                                 movie_rating.text=responseBody.rating.toString() + " ★★★★★"
                             }
-
-                           // LikeView.setOnClickListener { getLike(responseBody.favourite) }
+                            liked = getState(movieId)
+                            LikeView.setOnClickListener(View.OnClickListener {
+                                if(!liked){
+                                    liked = true
+                                    LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                                    /*Toast.makeText(
+                                        activity,
+                                        "Film added to favList",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                     */
+                                    markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
+                                    LikeView.refreshDrawableState()
+                                }
+                                else{
+                                    liked = false
+                                    LikeView.setBackgroundResource(R.drawable.heart_white)
+                                    markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
+                                    LikeView.refreshDrawableState()
+                                }
+                            })
                             //  movie_genre.text = " " + responseBody.categories + " "
                             movie_budget.text = responseBody.budget.toString() + " $"
 

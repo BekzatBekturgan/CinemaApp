@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.cinema.DetailsActivity
-import com.example.cinema.DetailsJohnWick
-import com.example.cinema.R
-import com.example.cinema.RetrofitService
+import com.example.cinema.*
 import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.MoviesData
 import kotlinx.android.synthetic.main.fragment_movies.*
@@ -32,12 +29,9 @@ open class MoviesFragment: Fragment() {
     private lateinit var picture:ImageView
     val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
     private lateinit var movie_post:ImageView
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          onCreateComponent()
-
 
     }
 
@@ -92,7 +86,6 @@ open class MoviesFragment: Fragment() {
             false
         )
         recyclerView.adapter = moviesAdapter
-
         getPopularMovies(
             onSuccess = :: onPopularMoviesFetched,
             onError =  :: onError
@@ -104,6 +97,7 @@ open class MoviesFragment: Fragment() {
         page: Int = 10,
         onSuccess: (movies: List<MoviesData>) -> Unit,
         onError: () -> Unit
+
 
     ) {
         RetrofitService.getMovieApi().getPopularMovies(page = page)

@@ -104,7 +104,7 @@ class AuthActivity : AppCompatActivity() {
             RequestSessionId(token)
         Log.d("get token on session id", pref.getString(TOKEN_KEY, ""))
         if (token != "error") {
-            var call: Call<SessionId> = RetrofitService.getPostApi().getSessionId(requestSessionId)
+            var call: Call<SessionId> = RetrofitService.getMovieApi().getSessionId(requestSessionId)
             call.enqueue(object : Callback<SessionId> {
                 override fun onFailure(call: Call<SessionId>, t: Throwable) {
                     Toast.makeText(this@AuthActivity, "ERROR WITH CONNECTION", Toast.LENGTH_SHORT)

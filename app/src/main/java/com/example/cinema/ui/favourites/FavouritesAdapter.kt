@@ -32,6 +32,7 @@ class FavouritesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
         fun bind (movie: MoviesData) {
             itemView.item_movie_title.text = movie?.title
             itemView.overview.text=movie?.overview
+            itemView.textViewData.text=movie?.releaseDate
 
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")

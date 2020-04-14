@@ -88,6 +88,11 @@ object RetrofitService {
             @Query("api_key") apiKey: String?,
             @Query("session_id") session: String?
         ): Call<MoviesData?>?
+
+        @GET("account?api_key=753b84576c954d96997803298a188f83")
+        fun getAccountDetails(
+            @Query("session_id") session: String?
+        )
     }
 
 }

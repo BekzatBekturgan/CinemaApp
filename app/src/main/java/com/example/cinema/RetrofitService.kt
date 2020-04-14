@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitService {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
-    private lateinit var movieApi: MovieApi
+    private lateinit var movieApi: UserClient
     fun getPostApi(): UserClient {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -30,13 +30,13 @@ object RetrofitService {
             .build()
         return retrofit.create(UserClient::class.java)
     }
-    fun getMovieApi(): MovieApi {
+    fun getMovieApi(): UserClient {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(getOkHttp())
             .build()
-        movieApi =  retrofit.create(MovieApi::class.java)
+        movieApi =  retrofit.create(UserClient::class.java)
         return movieApi
     }
     private fun getOkHttp(): OkHttpClient {
@@ -56,18 +56,7 @@ object RetrofitService {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-    interface MovieApi {
-        @GET("movie/popular")
-        fun getPopularMovies(
-            @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83",
-            @Query("page") page: Int
-        ): Call<MovieResponse>
 
-        @GET("movie/{movie_id}")
-        fun getMovieById(@Path("movie_id") movieId: Int=1,
-                         @Query("api_key") apiKey: String = "753b84576c954d96997803298a188f83")
-                :Call<MoviesData>
-    }
 
 }
 

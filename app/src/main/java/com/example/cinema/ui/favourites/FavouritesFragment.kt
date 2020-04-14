@@ -10,8 +10,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.cinema.*
 import com.example.cinema.api.model.MovieResponse
@@ -30,6 +33,7 @@ open class FavouritesFragment: Fragment() {
     private var moviesAdapter: FavouritesAdapter? = null
     private lateinit var rootView: View
     private lateinit var picture:ImageView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
     private lateinit var movie_post:ImageView
     var sessionId: String? = null
@@ -51,10 +55,28 @@ open class FavouritesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_favourites, container, false)
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout)
         sessionId = pref.getString("sessionID", "empty")
         Log.d("oncreateviewsessinid",
             sessionId
         )
+        getFavouriteMovies(
+            onSuccess = :: onPopularMoviesFetched,
+            onError =  :: onError
+        )
+        swipeRefreshLayout.setOnRefreshListener {
+            recyclerView.layoutManager = GridLayoutManager(
+                activity,
+                1
+            )
+            recyclerView.itemAnimator = DefaultItemAnimator()
+            recyclerView.adapter = moviesAdapter
+            moviesAdapter?.notifyDataSetChanged()
+            getFavouriteMovies(
+                onSuccess = :: onPopularMoviesFetched,
+                onError =  :: onError
+            )
+        }
         return rootView
 
     }
@@ -90,22 +112,21 @@ open class FavouritesFragment: Fragment() {
 
     private fun inititializeRecyclerView() {
         recyclerView = rootView.findViewById(R.id.favouriteMoviesRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(
+        recyclerView.layoutManager = GridLayoutManager(
             activity,
-            LinearLayoutManager.VERTICAL,
-            false
+            1
         )
+        recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = moviesAdapter
-        getFavouriteMovies(
-            onSuccess = :: onPopularMoviesFetched,
-            onError =  :: onError
-        )
+        moviesAdapter?.notifyDataSetChanged()
+
     }
 
     private fun getFavouriteMovies(
         onSuccess: (movies: List<MoviesData>) -> Unit,
         onError: () -> Unit
     ) {
+        swipeRefreshLayout.isRefreshing = true
         RetrofitService.getMovieApi().getFavouriteMovies(sessionId)
             .enqueue(object : Callback<MovieResponse> {
                 override fun onResponse(
@@ -116,14 +137,18 @@ open class FavouritesFragment: Fragment() {
                         val responseBody = response.body()
                         Log.d("get favourite movies", sessionId)
                         if (responseBody != null) {
+                            moviesAdapter?.clear()
                             onSuccess.invoke(responseBody.movies)
+                            moviesAdapter?.notifyDataSetChanged()
 
                         } else {
                             onError.invoke()
                         }
+
                     } else {
                         onError.invoke()
                     }
+                    swipeRefreshLayout.isRefreshing = false
                 }
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                     onError.invoke()

@@ -9,11 +9,8 @@ interface UserClient {
     @POST("authentication/token/validate_with_login?api_key=753b84576c954d96997803298a188f83")
     fun login(@Body login:Login): Call<Token>
     // create a new session_id
-    @POST("authentication/session/new")
-    fun createSession(
-        @Query("api_key") apiKey: String = api_key,
-        @Body token: Token
-    ) : Call<SessionId>
+    @POST("authentication/session/new?api_key=753b84576c954d96997803298a188f83")
+    fun getSessionId(@Body token:String): Call<SessionId>
 
     @GET("authentication/token/new?api_key=753b84576c954d96997803298a188f83")
     fun getToken():Call<Token>

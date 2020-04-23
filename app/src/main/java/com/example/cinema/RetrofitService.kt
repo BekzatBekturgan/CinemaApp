@@ -18,7 +18,7 @@ object RetrofitService {
             .addConverterFactory(GsonConverterFactory.create())
             .client(getOkHttp())
             .build()
-        movieApi =  retrofit.create(UserClient::class.java)
+        movieApi = retrofit.create(UserClient::class.java)
         return movieApi
     }
     private fun getOkHttp(): OkHttpClient {
@@ -28,7 +28,6 @@ object RetrofitService {
             .addInterceptor(getLoggingInterceptor())
         return okHttpClient.build()
     }
-
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(logger = object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
@@ -38,7 +37,5 @@ object RetrofitService {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
-
 }
 

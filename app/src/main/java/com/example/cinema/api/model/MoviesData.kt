@@ -14,13 +14,13 @@ data class MoviesData (
     val revenue: Long,
     val runtime: Int,
     val status: String,
-    val tagline: String,
+    val tagLine: String,
     val title: String,
     val video: Boolean,
     @SerializedName("vote_average")
     val rating: Double,
     val categories : String,
-    val favorite : Boolean=false,
+    val favorite : Boolean = false,
     @SerializedName("genre_ids")
-    val genre_ids: List<Int>?=null
+    val genre_ids: List<Int>? = null
 )

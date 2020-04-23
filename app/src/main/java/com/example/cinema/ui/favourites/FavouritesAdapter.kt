@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cinema.R
 import com.example.cinema.api.model.MoviesData
-import com.example.cinema.ui.favourites.BaseRecyclerViewAdapter
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class FavouritesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
@@ -30,9 +29,9 @@ class FavouritesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
             itemView.setOnClickListener(this)
         }
         fun bind (movie: MoviesData) {
-            itemView.item_movie_title.text = movie?.title
-            itemView.overview.text=movie?.overview
-            itemView.textViewData.text=movie?.releaseDate
+            itemView.itemMovieTitle.text = movie?.title
+            itemView.overview.text = movie?.overview
+            itemView.textViewData.text = movie?.releaseDate
 
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")

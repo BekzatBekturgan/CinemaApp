@@ -59,7 +59,7 @@ private val  mOnNavigationItemSelected = BottomNavigationView.OnNavigationItemSe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        textView=findViewById(R.id.textView)
+        textView = findViewById(R.id.textView)
         val bottomNavigation: BottomNavigationView = findViewById(R.id.navView)
         bottomNavigation.setOnNavigationItemSelectedListener (mOnNavigationItemSelected)
 

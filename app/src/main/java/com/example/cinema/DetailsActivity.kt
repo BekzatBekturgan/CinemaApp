@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.cinema.api.model.FavMovieInfo
 import com.example.cinema.api.model.FavResponse
 import com.example.cinema.api.model.MoviesData
-import com.example.cinema.api.service.api_key
+import com.example.cinema.api.service.apiKey
 import kotlinx.android.synthetic.main.activity_details.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,21 +20,21 @@ import retrofit2.Response
 class DetailsActivity : AppCompatActivity() {
      val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
     private lateinit var imageView: ImageView
-    private lateinit var movie_title: TextView
-    private lateinit var movie_overview: TextView
-    private lateinit var movie_release_date: TextView
-    private lateinit var movie_rating: TextView
-    private lateinit var movie_runtime: TextView
-    private lateinit var movie_budget: TextView
-    private lateinit var movie_revenue: TextView
-    private lateinit var movie_genre: TextView
+    private lateinit var movieTitle: TextView
+    private lateinit var movieOverview: TextView
+    private lateinit var movieReleaseDate: TextView
+    private lateinit var movieRating: TextView
+    private lateinit var movieRuntime: TextView
+    private lateinit var movieBudget: TextView
+    private lateinit var movieRevenue: TextView
+    private lateinit var movieGenre: TextView
 
     private lateinit var btnBack: Button
     private  var liked: Boolean? = null
 
-    private lateinit var LikeView: Button
+    private lateinit var likeView: Button
 
-    var sessionId: String? = null
+   private var sessionId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,29 +43,29 @@ class DetailsActivity : AppCompatActivity() {
 
         val movieId = intent.getIntExtra("movieId", 1)
 
-        movie_title = findViewById(R.id.movie_title)
+        movieTitle = findViewById(R.id.movie_title)
         imageView = findViewById(R.id.movie_poster)
-        movie_overview= findViewById(R.id.movie_overview)
-        movie_release_date = findViewById(R.id.movie_release_date)
-        movie_budget = findViewById(R.id.movie_budget)
-        movie_rating = findViewById(R.id.movie_rating)
-        movie_revenue = findViewById(R.id.movie_revenue)
-        movie_runtime = findViewById(R.id.movie_runtime)
-        movie_genre = findViewById(R.id.movie_genre)
+        movieOverview = findViewById(R.id.movie_overview)
+        movieReleaseDate = findViewById(R.id.movie_release_date)
+        movieBudget = findViewById(R.id.movie_budget)
+        movieRating = findViewById(R.id.movie_rating)
+        movieRevenue = findViewById(R.id.movie_revenue)
+        movieRuntime = findViewById(R.id.movie_runtime)
+        movieGenre = findViewById(R.id.movie_genre)
 
 
         val genreArray: Array<String> = arrayOf("  Fantasy ", "  Fantastic  ", "  Adventures  " , "  Comedy  " , "  Thriller  ")
 
 
         val index = (0..3).random()
-        movie_genre.text=genreArray[index]
+        movieGenre.text=genreArray[index]
         btnBack = findViewById(R.id.buttonBack)
 
         btnBack.setOnClickListener{
             finish()
         }
 
-        LikeView = findViewById(R.id.buttonLike)
+        likeView = findViewById(R.id.buttonLike)
         sessionId = pref.getString("sessionID", "empty")
 
         getMovieById(movieId)
@@ -97,7 +97,7 @@ class DetailsActivity : AppCompatActivity() {
         try {
             if (movieId != null) {
 
-                    RetrofitService.getMovieApi().getMovieState(movieId, api_key, sessionId)
+                    RetrofitService.getMovieApi().getMovieState(movieId, apiKey, sessionId)
                     ?.enqueue(object : Callback<MoviesData?> {
                         override fun onFailure(call: Call<MoviesData?>, t: Throwable) {
                             Log.d("fav", "lol")
@@ -109,17 +109,14 @@ class DetailsActivity : AppCompatActivity() {
                                 liked = response.body()?.favorite
 
                             if (liked == true) {
-                                LikeView.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                                likeView.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
                                 Log.d("liked", "correct")
 
                             }
-                            else{
-                                LikeView.setBackgroundResource(R.drawable.heart_white)
+                            else {
+                                likeView.setBackgroundResource(R.drawable.heart_white)
                                 Log.d("not liked", "wrong")
                             }
-
-
-
                         }
 
                     })
@@ -146,64 +143,54 @@ class DetailsActivity : AppCompatActivity() {
                         val responseBody = response.body()
                         Log.d("Check", responseBody?.title ?: "google")
                         if (responseBody != null) {
-                            movie_title.text = responseBody.title
-                            movie_overview.text = responseBody.overview
-                            movie_release_date.text = responseBody.releaseDate
-                            movie_runtime.text = responseBody.runtime.toString() + " min"
-                            movie_revenue.text = responseBody.revenue.toString() + " $"
+                            movieTitle.text = responseBody.title
+                            movieOverview.text = responseBody.overview
+                            movieReleaseDate.text = responseBody.releaseDate
+                            movieRuntime.text = responseBody.runtime.toString() + " min"
+                            movieRevenue.text = responseBody.revenue.toString() + " $"
                             liked = getState(movieId)
 
-                            if(responseBody.rating < 4){
-                                movie_rating.text=responseBody.rating.toString() + " ★"
+                            if (responseBody.rating < 4){
+                                movieRating.text = responseBody.rating.toString() + " ★"
                             }
-                            else if(responseBody.rating >= 4 && responseBody.rating < 6){
-                                movie_rating.text=responseBody.rating.toString() + " ★★"
+                            else if (responseBody.rating >= 4 && responseBody.rating < 6) {
+                                movieRating.text = responseBody.rating.toString() + " ★★"
 
                             }
-                            else if(responseBody.rating >=6 && responseBody.rating < 7){
-                                movie_rating.text=responseBody.rating.toString() + " ★★★"
+                            else if (responseBody.rating >= 6 && responseBody.rating < 7) {
+                                movieRating.text = responseBody.rating.toString() + " ★★★"
 
                             }
-                            else if(responseBody.rating >=7 && responseBody.rating <=8 ){
-                                movie_rating.text=responseBody.rating.toString() + " ★★★★"
+                            else if (responseBody.rating >= 7 && responseBody.rating <=8) {
+                                movieRating.text = responseBody.rating.toString() + " ★★★★"
 
                             }
-                            else if(responseBody.rating > 8 ){
-                                movie_rating.text=responseBody.rating.toString() + " ★★★★★"
+                            else if (responseBody.rating > 8){
+                                movieRating.text = responseBody.rating.toString() + " ★★★★★"
                             }
-                            LikeView?.setOnClickListener(View.OnClickListener {
+                            likeView?.setOnClickListener(View.OnClickListener {
                                 if(liked == false){
                                     liked = true
-                                    LikeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                                    likeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
                                     markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
-                                    LikeView?.refreshDrawableState()
+                                    likeView?.refreshDrawableState()
                                 }
-                                else{
+                                else {
                                     liked = false
-                                    LikeView?.setBackgroundResource(R.drawable.heart_white)
+                                    likeView?.setBackgroundResource(R.drawable.heart_white)
                                     markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
-                                    LikeView?.refreshDrawableState()
+                                    likeView?.refreshDrawableState()
                                 }
                             })
                             //  movie_genre.text = " " + responseBody.categories + " "
-                            movie_budget.text = responseBody.budget.toString() + " $"
-
-
-
-
+                            movieBudget.text = responseBody.budget.toString() + " $"
                             val moviePosterURL = POSTER_BASE_URL + responseBody.posterPath
                             Glide.with(this@DetailsActivity)
                                 .load(moviePosterURL)
                                 .into(movie_poster);
-
-
                         }
                     }
                 }
             })
-
     }
-
-
-
 }

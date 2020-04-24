@@ -2,6 +2,7 @@ package com.example.cinema.api.service
 
 import com.example.cinema.api.model.*
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 const val apiKey = "753b84576c954d96997803298a188f83"
@@ -51,4 +52,9 @@ interface UserClient {
         @Query("session_id") session: String?
     ) : Call<AccountDetails>?
 
+    //get favourite movies by coroutine
+    @GET("account/{account_id}/favorite/movies?api_key=753b84576c954d96997803298a188f83")
+    suspend fun getFavouriteMoviesCoroutine(
+        @Query("session_id") sessionId: String?
+    ): Response<List<Post>>
 }

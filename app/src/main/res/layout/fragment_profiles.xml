@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swipeRefreshLayoutProfile"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/swipeRefreshLayoutProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
@@ -47,7 +45,7 @@
                             android:id="@+id/textViewProfileName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Bekzat"
+                            android:text="Name"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:textColor="@android:color/black"
@@ -57,7 +55,7 @@
                             android:id="@+id/textViewProfileEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="bbekturgan0@gmail.com"
+                            android:text="Login"
                             android:textSize="16sp"
                             android:layout_marginHorizontal="8dp"/>
                     </LinearLayout>

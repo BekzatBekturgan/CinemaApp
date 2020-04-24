@@ -44,7 +44,7 @@ class AuthActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Token>, response: Response<Token>) {
                     if (response.isSuccessful) {
                         var answer: Token? = response.body()
-                        if (answer!!.success == true) {
+                        if (answer?.success == true) {
                             val intent = Intent(this@AuthActivity, MainActivity::class.java)
                             //        val bundle = Bundle()
                             //        bundle.putSerializable("item_el", item)
@@ -84,10 +84,10 @@ class AuthActivity : AppCompatActivity() {
                     val editor = pref.edit()
                     editor.putString(
                         TOKEN_KEY,
-                        answer!!.request_token
+                        answer?.request_token
                     )        // кладем полученный токен в shared preferences
                     editor.apply()
-                    Log.d("get token", pref.getString(TOKEN_KEY, answer!!.request_token))
+                    Log.d("get token", pref.getString(TOKEN_KEY, answer?.request_token))
                 } else {
                     Toast.makeText(this@AuthActivity, "Api key is not correct ", Toast.LENGTH_SHORT)
                         .show()
@@ -112,9 +112,9 @@ class AuthActivity : AppCompatActivity() {
 
                 override fun onResponse(call: Call<SessionId>, response: Response<SessionId>) {
                     if (response.body()?.success == true) {
-                        Log.d("pusk2", response.body()?.session_id.toString())
+                        Log.d("pusk2", response.body()?.sessionId.toString())
                         val edt = pref.edit()
-                        edt.putString("sessionID", response.body()?.session_id)
+                        edt.putString("sessionID", response.body()?.sessionId)
                         edt.apply()
                         Log.d("second check", pref.getString("sessionID", "empty 2").toString())
                     } else {
@@ -123,7 +123,7 @@ class AuthActivity : AppCompatActivity() {
                             "Login or password is not correct",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.d("session id", response.body()?.session_id)
+                        Log.d("session id", response.body()?.sessionId)
                     }
                 }
             })

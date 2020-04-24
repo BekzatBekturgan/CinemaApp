@@ -2,18 +2,10 @@ package com.example.cinema
 
 import android.util.Log
 import com.example.cinema.api.service.UserClient
-import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 object RetrofitService {
@@ -26,7 +18,7 @@ object RetrofitService {
             .addConverterFactory(GsonConverterFactory.create())
             .client(getOkHttp())
             .build()
-        movieApi =  retrofit.create(UserClient::class.java)
+        movieApi = retrofit.create(UserClient::class.java)
         return movieApi
     }
     private fun getOkHttp(): OkHttpClient {
@@ -36,7 +28,6 @@ object RetrofitService {
             .addInterceptor(getLoggingInterceptor())
         return okHttpClient.build()
     }
-
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(logger = object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
@@ -46,7 +37,5 @@ object RetrofitService {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
-
 }
 

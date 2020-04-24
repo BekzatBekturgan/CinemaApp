@@ -4,114 +4,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context=".AuthActivity">
 
 
-    <LinearLayout
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:background="#1c0014"
-        />
-    <LinearLayout
-        android:id="@+id/edit_block"
-        android:layout_width="320dp"
-        android:layout_height="300dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399"
-        android:background="#FFF"
 
-        android:radius="8dp"
-        >
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/shadow"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/word_login_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="20dp"
-            android:text="ЛОГИН"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="Логин"
             android:textColor="#000"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/login_view"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="23dp"
             android:ems="10"
             android:hint="Email"
-            app:layout_constraintBottom_toTopOf="@id/password_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:inputType="textEmailAddress"
+            android:text="MagiaGroz" />
 
         <EditText
             android:id="@+id/password_view"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            android:layout_marginEnd="23dp"
             android:ems="10"
             android:hint="Пароль"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_view" />
-
+            android:text="Movie123" />
 
         <TextView
-            android:id="@+id/forgot_password_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="180dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="116dp"
             android:text="Забыли пароль?"
             android:textColor="#000"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/login_button"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="52dp"
             android:background="#4aafff"
-            android:text="ЛОГИН"
-            android:textColor="#FFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/forgot_password_view" />
+            android:text="Логин"
+            android:textColor="#fff"
+            android:textStyle="bold" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="61dp"
+            android:layout_marginBottom="22dp"
+            android:text="У вас нет аккаунта?" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="22dp"
+            android:text="РЕГИСТРАЦИЯ"
+            android:textColor="#000"
+            android:textStyle="bold" />
 
-                android:layout_marginLeft="30dp"
-                android:text="У меня нет аккаунта?   " />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#1d011a"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="РЕГИСТРАЦИЯ"
-                android:textColor="#000"
-                android:textStyle="bold" />
-        </LinearLayout>
+
+    </RelativeLayout>
 
 
-    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

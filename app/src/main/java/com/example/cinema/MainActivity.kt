@@ -6,13 +6,10 @@ import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-
-import com.example.cinema.ui.movies.MoviesFragment
-import com.example.cinema.R
 import com.example.cinema.ui.favourites.FavouritesFragment
+import com.example.cinema.ui.movies.MoviesFragment
 import com.example.cinema.ui.profile.ProfileFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 val APP_PREFERENCES = "mysettings" // имя файла для shared preferences
 val TOKEN_KEY = "token"
@@ -62,7 +59,7 @@ private val  mOnNavigationItemSelected = BottomNavigationView.OnNavigationItemSe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        textView=findViewById(R.id.textView)
+        textView = findViewById(R.id.textView)
         val bottomNavigation: BottomNavigationView = findViewById(R.id.navView)
         bottomNavigation.setOnNavigationItemSelectedListener (mOnNavigationItemSelected)
 

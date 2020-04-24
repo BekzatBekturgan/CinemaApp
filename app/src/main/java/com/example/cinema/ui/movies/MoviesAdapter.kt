@@ -29,8 +29,8 @@ class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
             itemView.setOnClickListener(this)
         }
         fun bind (movie: MoviesData) {
-            itemView.item_movie_title.text = movie?.title
-            itemView.overview.text=movie?.overview
+            itemView.itemMovieTitle.text = movie?.title
+            itemView.overview.text = movie?.overview
 
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")

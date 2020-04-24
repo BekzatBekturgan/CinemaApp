@@ -56,5 +56,5 @@ interface UserClient {
     @GET("account/{account_id}/favorite/movies?api_key=753b84576c954d96997803298a188f83")
     suspend fun getFavouriteMoviesCoroutine(
         @Query("session_id") sessionId: String?
-    ): Response<List<Post>>
+    ): Response<MovieResponse>
 }

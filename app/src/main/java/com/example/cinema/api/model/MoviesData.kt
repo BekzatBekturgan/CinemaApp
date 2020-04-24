@@ -1,9 +1,14 @@
 package com.example.cinema.api.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "movie_table")
 data class MoviesData (
     val budget: Int,
+    @PrimaryKey
+    @SerializedName("id")
     val id: Int,
     val overview: String,
     val popularity: Double,

@@ -173,29 +173,32 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
         launch {
             swipeRefreshLayout.isRefreshing = true
             val list = withContext(Dispatchers.IO) {
-            try{
-                val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
+                try {
+                    val response =
+                        RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
 
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    //Log.d("get favourite movies", sessionId)
-                    if (responseBody != null) {
-                        moviesAdapter?.clear()
-                        moviesAdapter?.addItems(responseBody.movies as ArrayList<MoviesData>)
-                        moviesAdapter?.notifyDataSetChanged()
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        //Log.d("get favourite movies", sessionId)
 
+                        if (!responseBody.isNullOrEmpty())
+                            if (responseBody != null) {
+                                moviesAdapter?.clear()
+                                moviesAdapter?.addItems(responseBody.movies as ArrayList<MoviesData>)
+                                moviesAdapter?.notifyDataSetChanged()
+
+                            } else {
+                                Log.e("Error", sessionId)
+                            }
                     } else {
                         Log.e("Error", sessionId)
                     }
-                } else {
+                } catch(e: Exception) {
                     Log.e("Error", sessionId)
                 }
-            }
-            catch{
 
+                swipeRefreshLayout.isRefreshing = false
             }
-
-            swipeRefreshLayout.isRefreshing = false
         }
     }
 }

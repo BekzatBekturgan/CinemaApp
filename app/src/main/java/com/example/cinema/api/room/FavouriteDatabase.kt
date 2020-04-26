@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.cinema.api.model.AccountDetails
 import com.example.cinema.api.model.FavouriteMovies
 
-@Database(entities = [FavouriteMovies::class], version = 1)
+@Database(entities = [FavouriteMovies::class, AccountDetails::class], version = 1)
 abstract class FavouriteDatabase : RoomDatabase() {
 
     abstract fun favMoviesDao(): FavouriteDao

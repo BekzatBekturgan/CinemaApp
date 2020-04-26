@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.cinema.api.model.AccountDetails
+import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.ui.profile.ProfileFragment
 
-@Database(entities = [AccountDetails::class], version = 1)
+@Database(entities = [AccountDetails::class, FavouriteMovies::class], version = 1)
 abstract class AccountDetailsDatabase : RoomDatabase(){
 
     abstract fun accountDetailsDao(): AccountDetailsDao

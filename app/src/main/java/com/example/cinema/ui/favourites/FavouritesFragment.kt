@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.*
+import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.MoviesData
+import com.example.cinema.api.room.FavouriteDao
+import com.example.cinema.api.room.FavouriteDatabase
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +31,7 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
     private lateinit var rootView: View
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     var sessionId: String? = null
-    var movieDao: MovieDao? = null
+    var favMovieDao: FavouriteDao? = null
 
     private val job = Job()
 
@@ -58,6 +61,7 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
             sessionId
         )
 
+        favMovieDao = FavouriteDatabase.getDatabase(requireContext()).favMoviesDao()
         getFavouriteMoviesCoroutine()
 /*
         getFavouriteMovies(
@@ -175,16 +179,16 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                     val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
                     if (response?.isSuccessful!!) {
                         val result = response.body()
-                        if (!result?.movies.isNullOrEmpty()) {
-                            movieDao?.insertAll(result!!.movies)
+                        if (!result?.results.isNullOrEmpty()) {
+                            favMovieDao?.insertAll(result!!.results)
                         }
-                        result?.movies
+                        result?.results
                     } else {
-                        movieDao?.getAll() ?: emptyList<MoviesData>()
+                        favMovieDao?.getAll() ?: emptyList<MoviesData>()
                     }
                 } catch (e: Exception) {
-                    Log.e("Moviedatabase", e.toString())
-                    movieDao?.getAll() ?: emptyList<MoviesData>()
+                    Log.e("favourtite database", e.toString())
+                    favMovieDao?.getAll() ?: emptyList<MoviesData>()
                 }
             }
             moviesAdapter?.addItems(movies as List<MoviesData>)

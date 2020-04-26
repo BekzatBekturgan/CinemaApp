@@ -3,6 +3,7 @@ package com.example.cinema.ui.favourites
 import android.os.Handler
 import android.os.Looper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.api.model.MoviesData
 
 abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.ViewHolder>() {

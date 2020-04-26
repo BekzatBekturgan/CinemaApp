@@ -6,19 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.example.cinema.*
 import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.MoviesData
-import com.example.cinema.ui.favourites.FavouritesAdapter
-import com.example.cinema.ui.favourites.OnItemClickListner
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +28,7 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
     private lateinit var rootView: View
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     var sessionId: String? = null
+    var movieDao: MovieDao? = null
 
     private val job = Job()
 
@@ -63,12 +59,13 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
         )
 
         getFavouriteMoviesCoroutine()
-        /*
+/*
         getFavouriteMovies(
             onSuccess = ::onPopularMoviesFetched,
             onError = ::onError
         )
-        */
+
+ */
 
         swipeRefreshLayout.setOnRefreshListener {
             recyclerView.layoutManager = GridLayoutManager(
@@ -80,12 +77,14 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
             moviesAdapter?.notifyDataSetChanged()
 
             getFavouriteMoviesCoroutine()
-            /*
+/*
             getFavouriteMovies(
                 onSuccess = ::onPopularMoviesFetched,
                 onError = ::onError
             )
-             */
+
+
+ */
         }
         return rootView
 
@@ -159,7 +158,6 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                 }
             })
     }
-*/
 
     private fun onPopularMoviesFetched(movies: List<MoviesData>) {
         moviesAdapter?.addItems(movies as ArrayList<MoviesData>)
@@ -168,37 +166,31 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
     private fun onError() {
         Log.e("Error", sessionId)
     }
-
+*/
     private fun getFavouriteMoviesCoroutine() {
         launch {
             swipeRefreshLayout.isRefreshing = true
-            val list = withContext(Dispatchers.IO) {
+            val movies = withContext(Dispatchers.IO) {
                 try {
-                    val response =
-                        RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
-
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        //Log.d("get favourite movies", sessionId)
-
-                        if (!responseBody.isNullOrEmpty())
-                            if (responseBody != null) {
-                                moviesAdapter?.clear()
-                                moviesAdapter?.addItems(responseBody.movies as ArrayList<MoviesData>)
-                                moviesAdapter?.notifyDataSetChanged()
-
-                            } else {
-                                Log.e("Error", sessionId)
-                            }
+                    val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
+                    if (response?.isSuccessful!!) {
+                        val result = response.body()
+                        if (!result?.movies.isNullOrEmpty()) {
+                            movieDao?.insertAll(result!!.movies)
+                        }
+                        result?.movies
                     } else {
-                        Log.e("Error", sessionId)
+                        movieDao?.getAll() ?: emptyList<MoviesData>()
                     }
-                } catch(e: Exception) {
-                    Log.e("Error", sessionId)
+                } catch (e: Exception) {
+                    Log.e("Moviedatabase", e.toString())
+                    movieDao?.getAll() ?: emptyList<MoviesData>()
                 }
-
-                swipeRefreshLayout.isRefreshing = false
             }
+            moviesAdapter?.addItems(movies as List<MoviesData>)
+            moviesAdapter?.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
         }
     }
+
 }

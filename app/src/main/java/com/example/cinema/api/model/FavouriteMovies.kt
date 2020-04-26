@@ -14,7 +14,7 @@ data class FavouriteMovies (
     @SerializedName("vote_count")
     val voteCount: Int? = null,
     @SerializedName("poster_path")
-    val poster_path: String? = null,
+    val posterPath: String? = null,
     @SerializedName("original_title")
     val originalTitle: String? = null,
     @SerializedName("overview")

@@ -44,7 +44,5 @@ class FavouritesAdapter: BaseRecyclerViewAdapter<FavouriteMovies>(){
                 itemClickListener?.onItemClick(adapterPosition, v)
             }
         }
-
     }
-
 }

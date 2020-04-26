@@ -6,13 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.cinema.api.model.AccountDetails
 import com.example.cinema.api.model.FavouriteMovies
-import com.example.cinema.ui.profile.ProfileFragment
 
 @Database(entities = [AccountDetails::class, FavouriteMovies::class], version = 1)
 abstract class AccountDetailsDatabase : RoomDatabase(){
 
     abstract fun accountDetailsDao(): AccountDetailsDao
-
 
     companion object {
         var INSTANCE: AccountDetailsDatabase? = null
@@ -28,5 +26,4 @@ abstract class AccountDetailsDatabase : RoomDatabase(){
             return INSTANCE!!
         }
     }
-
 }

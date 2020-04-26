@@ -8,6 +8,7 @@ import com.example.cinema.api.model.AccountDetails
 
 @Dao
 interface AccountDetailsDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAccountDetails(accountDetails: AccountDetails)
 

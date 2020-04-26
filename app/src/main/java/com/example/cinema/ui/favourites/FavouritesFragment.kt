@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.*
 import com.example.cinema.api.model.FavouriteMovies
-import com.example.cinema.api.model.MoviesData
 import com.example.cinema.api.room.FavouriteDao
 import com.example.cinema.api.room.FavouriteDatabase
 import kotlinx.coroutines.*
@@ -44,7 +43,6 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
     }
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,20 +50,11 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
         rootView = inflater.inflate(R.layout.fragment_favourites, container, false)
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout)
         sessionId = pref.getString("sessionID", "empty")
-        Log.d(
-            "oncreateviewsessinid",
-            sessionId
-        )
+
+        Log.d("oncreateviewsessinid", sessionId)
 
         favMovieDao = FavouriteDatabase.getDatabase(requireContext()).favMoviesDao()
         getFavouriteMoviesCoroutine()
-/*
-        getFavouriteMovies(
-            onSuccess = ::onPopularMoviesFetched,
-            onError = ::onError
-        )
-
- */
 
         swipeRefreshLayout.setOnRefreshListener {
             recyclerView.layoutManager = GridLayoutManager(
@@ -77,24 +66,13 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
             moviesAdapter?.notifyDataSetChanged()
 
             getFavouriteMoviesCoroutine()
-/*
-            getFavouriteMovies(
-                onSuccess = ::onPopularMoviesFetched,
-                onError = ::onError
-            )
-
-
- */
         }
         return rootView
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
-
     }
 
     private fun initView() {
@@ -121,52 +99,8 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = moviesAdapter
         moviesAdapter?.notifyDataSetChanged()
-
-    }
-/*
-    private fun getFavouriteMovies(
-        onSuccess: (movies: List<MoviesData>) -> Unit,
-        onError: () -> Unit
-    ) {
-        swipeRefreshLayout.isRefreshing = true
-        RetrofitService.getMovieApi().getFavouriteMovies(sessionId)
-            .enqueue(object : Callback<MovieResponse> {
-                override fun onResponse(
-                    call: Call<MovieResponse>,
-                    response: Response<MovieResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        Log.d("get favourite movies", sessionId)
-                        if (responseBody != null) {
-                            moviesAdapter?.clear()
-                            onSuccess.invoke(responseBody.movies)
-                            moviesAdapter?.notifyDataSetChanged()
-
-                        } else {
-                            onError.invoke()
-                        }
-
-                    } else {
-                        onError.invoke()
-                    }
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
-                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                    onError.invoke()
-                }
-            })
     }
 
-    private fun onPopularMoviesFetched(movies: List<MoviesData>) {
-        moviesAdapter?.addItems(movies as ArrayList<MoviesData>)
-    }
-
-    private fun onError() {
-        Log.e("Error", sessionId)
-    }
-*/
     private fun getFavouriteMoviesCoroutine() {
         launch {
             swipeRefreshLayout.isRefreshing = true
@@ -193,5 +127,4 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
             swipeRefreshLayout.isRefreshing = false
         }
     }
-
 }

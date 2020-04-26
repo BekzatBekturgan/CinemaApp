@@ -1,8 +1,6 @@
 package com.example.cinema.api.model
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 
 data class MoviesData (
@@ -35,6 +33,4 @@ data class MoviesData (
     @SerializedName("categories")
     val categories : String,
     val favorite : Boolean = false
-    //@SerializedName("genre_ids")
-    //val genreIds: List<Int>? = null
 )

@@ -62,5 +62,5 @@ interface UserClient {
     @GET("account?api_key=753b84576c954d96997803298a188f83")
     suspend fun getAccountDetailsCoroutine(
         @Query("session_id") session: String?
-    ) : Response<AccountDetails>
+    ): Response<AccountDetails>
 }

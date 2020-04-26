@@ -11,7 +11,6 @@ abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.Vie
     private var list: ArrayList<T>? = ArrayList<T>()
     protected var itemClickListener: OnItemClickListner? = null
 
-
     fun addItems(items: List<T>) {
         this.list?.addAll(items)
         reload()
@@ -35,5 +34,4 @@ abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.Vie
     private fun reload() {
         Handler(Looper.getMainLooper()).post { notifyDataSetChanged() }
     }
-
 }

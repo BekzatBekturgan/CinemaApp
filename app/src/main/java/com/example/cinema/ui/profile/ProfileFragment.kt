@@ -1,23 +1,19 @@
 package com.example.cinema.ui.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.R
 import com.example.cinema.RetrofitService
 import com.example.cinema.api.model.AccountDetails
-import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.api.room.AccountDetailsDao
 import com.example.cinema.api.room.AccountDetailsDatabase
 import com.example.cinema.pref
 import kotlinx.coroutines.*
-import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
 class ProfileFragment: Fragment(), CoroutineScope {
@@ -64,37 +60,7 @@ class ProfileFragment: Fragment(), CoroutineScope {
         super.onDestroy()
         job.cancel()
     }
-/*
-    private fun getAccountDetails() {
-        swipeRefreshLayout.isRefreshing = true
-        RetrofitService.getMovieApi().getAccountDetails(sessionId)
-            ?.enqueue(object : Callback<AccountDetails?> {
-                override fun onFailure(call: Call<AccountDetails?>, t: Throwable) {
-                    Log.e("Error", "Error")
-                }
-                override fun onResponse(
-                    call: Call<AccountDetails?>,
-                    response: Response<AccountDetails?>
-                ) {
-                    Log.d("Error", "Error on response")
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        Log.d("Check", responseBody?.name ?: "google")
-                        if (responseBody != null) {
-                            textViewName?.setText(responseBody.name)
-                            Log.d("name", textViewName?.text.toString())
-                            textViewUsername?.setText(responseBody.username)
-                        }
-                    }
 
-                    else{
-                        Log.d("Response fail", "response failed")
-                    }
-                    swipeRefreshLayout.isRefreshing = false
-                }
-            })
-    }
-*/
     private fun getAccountDetailsCoroutine() {
         launch {
             swipeRefreshLayout.isRefreshing = true

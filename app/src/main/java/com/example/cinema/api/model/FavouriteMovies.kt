@@ -1,9 +1,7 @@
 package com.example.cinema.api.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "favourite_movie_table")
@@ -22,5 +20,4 @@ data class FavouriteMovies (
     @SerializedName("release_date")
     val releaseDate: String? = null,
     var favorite: Boolean? = null
-    //val genreId: List<Int>? = null
 )

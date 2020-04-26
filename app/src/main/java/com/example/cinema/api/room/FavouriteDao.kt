@@ -10,8 +10,8 @@ import com.example.cinema.api.model.FavouriteMovies
 interface FavouriteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFav(list: List<FavouriteMovies>)
+    fun insertAll(list: List<FavouriteMovies>)
 
     @Query("Select * from favourite_movie_table ")
-    fun getFav(): List<FavouriteMovies>
+    fun getAll(): List<FavouriteMovies>
 }

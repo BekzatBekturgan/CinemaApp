@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.cinema.api.model.AccountDetails
+import com.example.cinema.ui.profile.ProfileFragment
 
 @Database(entities = [AccountDetails::class], version = 1)
 abstract class AccountDetailsDatabase : RoomDatabase(){
 
+    abstract fun accountDetailsDao(): AccountDetailsDao
+
 
     companion object {
-
         var INSTANCE: AccountDetailsDatabase? = null
 
         fun getDatabase(context: Context): AccountDetailsDatabase {
@@ -19,7 +21,7 @@ abstract class AccountDetailsDatabase : RoomDatabase(){
                 INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
                     AccountDetailsDatabase::class.java,
-                    "account_details_database.db"
+                    "app_database.db"
                 ).build()
             }
             return INSTANCE!!

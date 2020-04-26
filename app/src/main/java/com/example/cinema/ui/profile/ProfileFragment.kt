@@ -1,7 +1,6 @@
 package com.example.cinema.ui.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.R
 import com.example.cinema.RetrofitService
-import com.example.cinema.TOKEN_KEY
 import com.example.cinema.api.model.AccountDetails
-import com.example.cinema.api.model.MoviesData
+import com.example.cinema.api.room.AccountDetailsDao
+import com.example.cinema.api.room.AccountDetailsDatabase
 import com.example.cinema.pref
-import kotlinx.android.synthetic.main.fragment_profiles.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import org.w3c.dom.Text
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class ProfileFragment: Fragment(), CoroutineScope {
@@ -32,8 +23,11 @@ class ProfileFragment: Fragment(), CoroutineScope {
     private var sessionId: String? = null
     private var textViewName: TextView? = null
     private var textViewUsername: TextView? = null
+    private lateinit var accountDetails: AccountDetails
 
     private val job = Job()
+
+    private var accountDetailsDao: AccountDetailsDao? = null
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -52,6 +46,7 @@ class ProfileFragment: Fragment(), CoroutineScope {
         rootView = inflater.inflate(R.layout.fragment_profiles, container, false)
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProfile)
         getAccountDetailsCoroutine()
+        accountDetailsDao = AccountDetailsDatabase.getDatabase(requireActivity()).accountDetailsDao()
         swipeRefreshLayout.setOnRefreshListener {
             getAccountDetailsCoroutine()
         }
@@ -62,7 +57,6 @@ class ProfileFragment: Fragment(), CoroutineScope {
     private fun bindViews(rootView: View) {
         textViewName = rootView.findViewById(R.id.textViewProfileName)
         textViewUsername = rootView.findViewById(R.id.textViewProfileEmail)
-
     }
 
     override fun onDestroy() {
@@ -103,14 +97,25 @@ class ProfileFragment: Fragment(), CoroutineScope {
     private fun getAccountDetailsCoroutine() {
         launch {
             swipeRefreshLayout.isRefreshing = true
-            val response = RetrofitService.getMovieApi().getAccountDetailsCoroutine(sessionId)
-            if (response.isSuccessful) {
-                val responseBody = response.body()
-                textViewName?.setText(responseBody?.name)
-                textViewUsername?.setText(responseBody?.username)
-            } else {
-                //Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+            val details = withContext(Dispatchers.IO) {
+                try {
+                    val response =
+                        RetrofitService.getMovieApi().getAccountDetailsCoroutine(sessionId)
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if(!responseBody?.username.isNullOrEmpty() && !responseBody?.name.isNullOrEmpty()){
+                            accountDetailsDao?.insertAccountDetails(responseBody as AccountDetails)
+                        }
+                        responseBody
+                    } else {
+
+                    }
+                } catch (e: Exception) {
+                    //accountDetailsDao?.getAccountsDetails() ?: AccountDetails()
+                }
             }
+            textViewName?.setText(accountDetails?.name)
+            textViewUsername?.setText(accountDetails?.username)
             swipeRefreshLayout.isRefreshing = false
         }
     }

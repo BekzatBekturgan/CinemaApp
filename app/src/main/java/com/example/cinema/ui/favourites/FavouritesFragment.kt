@@ -13,14 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.*
 import com.example.cinema.api.model.FavouriteMovies
-import com.example.cinema.api.model.MovieResponse
 import com.example.cinema.api.model.MoviesData
 import com.example.cinema.api.room.FavouriteDao
 import com.example.cinema.api.room.FavouriteDatabase
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
 
 
@@ -184,14 +180,15 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                         }
                         result?.results
                     } else {
-                        favMovieDao?.getAll() ?: emptyList<MoviesData>()
+                        favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                     }
                 } catch (e: Exception) {
                     Log.e("favourtite database", e.toString())
-                    favMovieDao?.getAll() ?: emptyList<MoviesData>()
+                    favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                 }
             }
-            moviesAdapter?.addItems(movies as List<MoviesData>)
+            moviesAdapter?.clear()
+            moviesAdapter?.addItems(movies as List<FavouriteMovies>)
             moviesAdapter?.notifyDataSetChanged()
             swipeRefreshLayout.isRefreshing = false
         }

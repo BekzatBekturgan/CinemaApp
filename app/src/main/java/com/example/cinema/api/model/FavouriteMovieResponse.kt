@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class FavouriteMovieResponse (
     @SerializedName("results")
-    val results: List<FavMovies>
+    val results: List<FavouriteMovies>
 )

@@ -34,8 +34,7 @@ data class MoviesData (
     val rating: Double,
     @SerializedName("categories")
     val categories : String,
-    @SerializedName("favorite")
-    val favorite : Boolean = false,
-    @SerializedName("genre_ids")
-    val genreIds: List<Int>? = null
+    val favorite : Boolean = false
+    //@SerializedName("genre_ids")
+    //val genreIds: List<Int>? = null
 )

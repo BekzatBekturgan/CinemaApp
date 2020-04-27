@@ -73,11 +73,12 @@ class DetailsActivity : AppCompatActivity(), CoroutineScope {
         likeView = findViewById(R.id.buttonLike)
         sessionId = pref.getString("sessionID", "empty")
 
-
-       // getMovieById(movieId)
         getMovieByIdCoroutine(movieId)
     }
+    private val job = Job()
 
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
     fun markAsFav(info: FavMovieInfo, sessionId: String?) {
         try {
                 RetrofitService.getMovieApi().addFavList(info, sessionId)
@@ -136,135 +137,62 @@ class DetailsActivity : AppCompatActivity(), CoroutineScope {
     }
 
 
-/*    private fun getMovieById(movieId: Int) {
-        RetrofitService.getMovieApi().getMovieById(movieId)
-            .enqueue(object : Callback<MoviesData> {
-                override fun onFailure(call: Call<MoviesData>, t: Throwable) {
-                    Log.e("Error", "Error")
-                }
-                override fun onResponse(
-                    call: Call<MoviesData>,
-                    response: Response<MoviesData>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        Log.d("Check", responseBody?.title ?: "google")
-                        if (responseBody != null) {
-                            movieTitle.text = responseBody.title
-                            movieOverview.text = responseBody.overview
-                            movieReleaseDate.text = responseBody.releaseDate
-                            movieRuntime.text = responseBody.runtime.toString() + " min"
-                            movieRevenue.text = responseBody.revenue.toString() + " $"
-                            liked = getState(movieId)
+    private fun getMovieByIdCoroutine(movieId: Int){
+        launch {
+            val response = RetrofitService.getMovieApi().getMovieByIdCoroutine(movieId)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                Log.d("Check", responseBody?.title ?: "google")
+                if (responseBody != null) {
+                    movieTitle.text = responseBody.title
+                    movieOverview.text = responseBody.overview
+                    movieReleaseDate.text = responseBody.releaseDate
+                    movieRuntime.text = responseBody.runtime.toString() + " min"
+                    movieRevenue.text = responseBody.revenue.toString() + " $"
+                    liked = getState(movieId)
 
-                            if (responseBody.rating < 4){
-                                movieRating.text = responseBody.rating.toString() + " ★"
-                            }
-                            else if (responseBody.rating >= 4 && responseBody.rating < 6) {
-                                movieRating.text = responseBody.rating.toString() + " ★★"
+                    if (responseBody.rating < 4){
+                        movieRating.text = responseBody.rating.toString() + " ★"
+                    }
+                    else if (responseBody.rating >= 4 && responseBody.rating < 6) {
+                        movieRating.text = responseBody.rating.toString() + " ★★"
 
-                            }
-                            else if (responseBody.rating >= 6 && responseBody.rating < 7) {
-                                movieRating.text = responseBody.rating.toString() + " ★★★"
+                    }
+                    else if (responseBody.rating >= 6 && responseBody.rating < 7) {
+                        movieRating.text = responseBody.rating.toString() + " ★★★"
 
-                            }
-                            else if (responseBody.rating >= 7 && responseBody.rating <=8) {
-                                movieRating.text = responseBody.rating.toString() + " ★★★★"
+                    }
+                    else if (responseBody.rating >= 7 && responseBody.rating <=8) {
+                        movieRating.text = responseBody.rating.toString() + " ★★★★"
 
-                            }
-                            else if (responseBody.rating > 8){
-                                movieRating.text = responseBody.rating.toString() + " ★★★★★"
-                            }
-                            likeView?.setOnClickListener(View.OnClickListener {
-                                if(liked == false){
-                                    liked = true
-                                    likeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
-                                    markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
-                                    likeView?.refreshDrawableState()
-                                }
-                                else {
-                                    liked = false
-                                    likeView?.setBackgroundResource(R.drawable.heart_white)
-                                    markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
-                                    likeView?.refreshDrawableState()
-                                }
-                            })
-                            //  movie_genre.text = " " + responseBody.categories + " "
-                            movieBudget.text = responseBody.budget.toString() + " $"
-                            val moviePosterURL = POSTER_BASE_URL + responseBody.posterPath
-                            Glide.with(this@DetailsActivity)
-                                .load(moviePosterURL)
-                                .into(movie_poster);
+                    }
+                    else if (responseBody.rating > 8){
+                        movieRating.text = responseBody.rating.toString() + " ★★★★★"
+                    }
+                    likeView?.setOnClickListener(View.OnClickListener {
+                        if(liked == false){
+                            liked = true
+                            likeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
+                            markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
+                            likeView?.refreshDrawableState()
                         }
-                    }
-                }
-            })
-    }*/
-private fun getMovieByIdCoroutine(movieId: Int){
-    launch {
-
-
-        val response = RetrofitService.getMovieApi().getMovieByIdCoroutine(movieId)
-        if (response.isSuccessful) {
-            val responseBody = response.body()
-            Log.d("Check", responseBody?.title ?: "google")
-            if (responseBody != null) {
-                movieTitle.text = responseBody.title
-                movieOverview.text = responseBody.overview
-                movieReleaseDate.text = responseBody.releaseDate
-                movieRuntime.text = responseBody.runtime.toString() + " min"
-                movieRevenue.text = responseBody.revenue.toString() + " $"
-                liked = getState(movieId)
-
-                if (responseBody.rating < 4){
-                    movieRating.text = responseBody.rating.toString() + " ★"
-                }
-                else if (responseBody.rating >= 4 && responseBody.rating < 6) {
-                    movieRating.text = responseBody.rating.toString() + " ★★"
+                        else {
+                            liked = false
+                            likeView?.setBackgroundResource(R.drawable.heart_white)
+                            markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
+                            likeView?.refreshDrawableState()
+                        }
+                    })
+                    //  movie_genre.text = " " + responseBody.categories + " "
+                    movieBudget.text = responseBody.budget.toString() + " $"
+                    val moviePosterURL = POSTER_BASE_URL + responseBody.posterPath
+                    Glide.with(this@DetailsActivity)
+                        .load(moviePosterURL)
+                        .into(movie_poster);
 
                 }
-                else if (responseBody.rating >= 6 && responseBody.rating < 7) {
-                    movieRating.text = responseBody.rating.toString() + " ★★★"
-
-                }
-                else if (responseBody.rating >= 7 && responseBody.rating <=8) {
-                    movieRating.text = responseBody.rating.toString() + " ★★★★"
-
-                }
-                else if (responseBody.rating > 8){
-                    movieRating.text = responseBody.rating.toString() + " ★★★★★"
-                }
-                likeView?.setOnClickListener(View.OnClickListener {
-                    if(liked == false){
-                        liked = true
-                        likeView?.setBackgroundResource(R.drawable.ic_favorite_black_24dp)
-                        markAsFav(FavMovieInfo(true, movieId, "movie"), sessionId)
-                        likeView?.refreshDrawableState()
-                    }
-                    else {
-                        liked = false
-                        likeView?.setBackgroundResource(R.drawable.heart_white)
-                        markAsFav(FavMovieInfo(false, movieId, "movie"), sessionId)
-                        likeView?.refreshDrawableState()
-                    }
-                })
-                //  movie_genre.text = " " + responseBody.categories + " "
-                movieBudget.text = responseBody.budget.toString() + " $"
-                val moviePosterURL = POSTER_BASE_URL + responseBody.posterPath
-                Glide.with(this@DetailsActivity)
-                    .load(moviePosterURL)
-                    .into(movie_poster);
-
             }
-        }
 
         }
-    }
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 }

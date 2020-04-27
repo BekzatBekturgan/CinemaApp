@@ -12,7 +12,7 @@ abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.Vie
     protected var itemClickListener: OnItemClickListner? = null
 
 
-    fun addItems(items: ArrayList<T>) {
+    fun addItems(items: List<T>) {
         this.list?.addAll(items)
         reload()
     }

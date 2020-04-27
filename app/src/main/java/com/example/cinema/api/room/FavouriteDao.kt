@@ -12,6 +12,6 @@ interface FavouriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<FavouriteMovies>)
 
-    @Query("Select * from favourite_movie_table ")
+    @Query("Select * from favourite_movie_table")
     fun getAll(): List<FavouriteMovies>
 }

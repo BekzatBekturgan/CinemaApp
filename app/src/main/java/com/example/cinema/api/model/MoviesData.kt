@@ -3,18 +3,19 @@ package com.example.cinema.api.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-@Entity(tableName = "movie_data_table")
+
+@Entity(tableName = "movie_table")
 data class MoviesData (
-    val budget: Int,
+    val budget: Int? = null,
     @PrimaryKey
     @SerializedName("id")
     val id: Int,
     @SerializedName("overview")
-    val overview: String,
+    val overview: String? = null,
     @SerializedName("popularity")
     val popularity: Double,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String? = null,
     @SerializedName("release_date")
     val releaseDate: String,
     @SerializedName("revenue")
@@ -22,16 +23,16 @@ data class MoviesData (
     @SerializedName("runtime")
     val runtime: Int,
     @SerializedName("status")
-    val status: String,
+    val status: String? = null,
     @SerializedName("tag_line")
-    val tagLine: String,
+    val tagLine: String? = null,
     @SerializedName("title")
-    val title: String,
+    val title: String? = null,
     @SerializedName("video")
-    val video: Boolean,
+    val video: Boolean? = null,
     @SerializedName("vote_average")
     val rating: Double,
     @SerializedName("categories")
-    val categories : String,
-    val favorite : Boolean = false
+    val categories : String? = null,
+    val favorite : Boolean? = null
 )

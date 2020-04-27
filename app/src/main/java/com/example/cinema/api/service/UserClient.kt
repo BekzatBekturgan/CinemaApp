@@ -63,4 +63,11 @@ interface UserClient {
     suspend fun getAccountDetailsCoroutine(
         @Query("session_id") session: String?
     ): Response<AccountDetails>
+
+    // get popular movies by coroutine
+    @GET("movie/popular")
+    suspend fun getPopularMoviesCoroutine(
+        @Query("api_key") apiKey: String = com.example.cinema.api.service.apiKey,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
 }

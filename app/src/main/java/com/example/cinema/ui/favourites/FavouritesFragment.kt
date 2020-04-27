@@ -11,38 +11,38 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.example.cinema.*
-import com.example.cinema.api.model.MovieResponse
-import com.example.cinema.api.model.MoviesData
-import com.example.cinema.ui.favourites.FavouritesAdapter
-import com.example.cinema.ui.favourites.OnItemClickListner
-import kotlinx.android.synthetic.main.fragment_movies.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.cinema.api.model.FavouriteMovies
+import com.example.cinema.api.room.FavouriteDao
+import com.example.cinema.api.room.FavouriteDatabase
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 
-open class FavouritesFragment: Fragment() {
+open class FavouritesFragment: Fragment(), CoroutineScope {
 
     lateinit var recyclerView: RecyclerView
     private var moviesAdapter: FavouritesAdapter? = null
     private lateinit var rootView: View
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     var sessionId: String? = null
+    var favMovieDao: FavouriteDao? = null
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onCreateComponent()
-
     }
 
     private fun onCreateComponent() {
         moviesAdapter = FavouritesAdapter()
     }
 
-
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,13 +50,12 @@ open class FavouritesFragment: Fragment() {
         rootView = inflater.inflate(R.layout.fragment_favourites, container, false)
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout)
         sessionId = pref.getString("sessionID", "empty")
-        Log.d("oncreateviewsessinid",
-            sessionId
-        )
-        getFavouriteMovies(
-            onSuccess = :: onPopularMoviesFetched,
-            onError =  :: onError
-        )
+
+        Log.d("oncreateviewsessinid", sessionId)
+
+        favMovieDao = FavouriteDatabase.getDatabase(requireContext()).favMoviesDao()
+        getFavouriteMoviesCoroutine()
+
         swipeRefreshLayout.setOnRefreshListener {
             recyclerView.layoutManager = GridLayoutManager(
                 activity,
@@ -65,20 +64,15 @@ open class FavouritesFragment: Fragment() {
             recyclerView.itemAnimator = DefaultItemAnimator()
             recyclerView.adapter = moviesAdapter
             moviesAdapter?.notifyDataSetChanged()
-            getFavouriteMovies(
-                onSuccess = :: onPopularMoviesFetched,
-                onError =  :: onError
-            )
+
+            getFavouriteMoviesCoroutine()
         }
         return rootView
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
-
     }
 
     private fun initView() {
@@ -86,7 +80,7 @@ open class FavouritesFragment: Fragment() {
         inititializeRecyclerView()
     }
 
-    private fun setUpAdapter(){
+    private fun setUpAdapter() {
         moviesAdapter?.setOnItemClickListener(onItemClickListener = object : OnItemClickListner {
             override fun onItemClick(position: Int, view: View) {
                 val intent = Intent(activity, DetailsActivity::class.java)
@@ -105,53 +99,32 @@ open class FavouritesFragment: Fragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = moviesAdapter
         moviesAdapter?.notifyDataSetChanged()
-
     }
 
-    private fun getFavouriteMovies(
-        onSuccess: (movies: List<MoviesData>) -> Unit,
-        onError: () -> Unit
-    ) {
-        swipeRefreshLayout.isRefreshing = true
-        RetrofitService.getMovieApi().getFavouriteMovies(sessionId)
-            .enqueue(object : Callback<MovieResponse> {
-                override fun onResponse(
-                    call: Call<MovieResponse>,
-                    response: Response<MovieResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        Log.d("get favourite movies", sessionId)
-                        if (responseBody != null) {
-                            moviesAdapter?.clear()
-                            onSuccess.invoke(responseBody.movies)
-                            moviesAdapter?.notifyDataSetChanged()
-
-                        } else {
-                            onError.invoke()
+    private fun getFavouriteMoviesCoroutine() {
+        launch {
+            swipeRefreshLayout.isRefreshing = true
+            val movies = withContext(Dispatchers.IO) {
+                try {
+                    val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
+                    if (response?.isSuccessful!!) {
+                        val result = response.body()
+                        if (!result?.results.isNullOrEmpty()) {
+                            favMovieDao?.insertAll(result!!.results)
                         }
-
+                        result?.results
                     } else {
-                        onError.invoke()
+                        favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                     }
-                    swipeRefreshLayout.isRefreshing = false
+                } catch (e: Exception) {
+                    Log.e("favourtite database", e.toString())
+                    favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                 }
-                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                    onError.invoke()
-                }
-            })
+            }
+            moviesAdapter?.clear()
+            moviesAdapter?.addItems(movies as List<FavouriteMovies>)
+            moviesAdapter?.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
-
-
-
-
-
-    private fun onPopularMoviesFetched(movies: List<MoviesData>) {
-        moviesAdapter?.addItems(movies as ArrayList<MoviesData>)
-    }
-
-    private fun onError() {
-        Log.e("Error", sessionId)
-    }
-
 }

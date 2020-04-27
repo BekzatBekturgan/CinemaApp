@@ -52,4 +52,15 @@ interface UserClient {
         @Query("session_id") session: String?
     ) : Call<AccountDetails>?
 
+    //get favourite movies by coroutine
+    @GET("account/{account_id}/favorite/movies?api_key=753b84576c954d96997803298a188f83")
+    suspend fun getFavouriteMoviesCoroutine(
+        @Query("session_id") session: String?
+    ): Response<FavouriteMovieResponse>
+
+    //get account details by coroutine
+    @GET("account?api_key=753b84576c954d96997803298a188f83")
+    suspend fun getAccountDetailsCoroutine(
+        @Query("session_id") session: String?
+    ): Response<AccountDetails>
 }

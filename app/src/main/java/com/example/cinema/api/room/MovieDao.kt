@@ -7,10 +7,10 @@ import androidx.room.Query
 import com.example.cinema.api.model.MoviesData
 
 @Dao
-interface MoviesDataDao {
+interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<MoviesData>)
 
-    @Query("Select * from movie_data_table ")
+    @Query("Select * from movie_table")
     fun getAll(): List<MoviesData>
 }

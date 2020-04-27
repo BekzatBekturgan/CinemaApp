@@ -1,4 +1,4 @@
-package com.example.cinema.ui.movies
+package com.example.cinema.ui.favourites
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,11 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cinema.R
+import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.api.model.MoviesData
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
+class FavouritesAdapter: BaseRecyclerViewAdapter<FavouriteMovies>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MoviesViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
@@ -28,9 +29,10 @@ class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
         init {
             itemView.setOnClickListener(this)
         }
-        fun bind (movie: MoviesData) {
-            itemView.itemMovieTitle.text = movie?.title
+        fun bind (movie: FavouriteMovies) {
+            itemView.itemMovieTitle.text = movie?.originalTitle
             itemView.overview.text = movie?.overview
+            itemView.textViewData.text = movie?.releaseDate
 
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")
@@ -42,8 +44,5 @@ class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
                 itemClickListener?.onItemClick(adapterPosition, v)
             }
         }
-
     }
-
 }
-

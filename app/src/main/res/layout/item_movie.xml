@@ -46,7 +46,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_movie_title"
+                android:id="@+id/itemMovieTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
@@ -88,6 +88,7 @@
                     app:srcCompat="@drawable/clock_128px" />
 
                 <TextView
+                    android:id="@+id/textViewData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

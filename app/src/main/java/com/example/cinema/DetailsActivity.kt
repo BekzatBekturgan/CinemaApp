@@ -13,11 +13,20 @@ import com.example.cinema.api.model.FavResponse
 import com.example.cinema.api.model.MoviesData
 import com.example.cinema.api.service.apiKey
 import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.coroutines.CoroutineContext
 
-class DetailsActivity : AppCompatActivity() {
+class DetailsActivity : AppCompatActivity(), CoroutineScope {
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
      val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
     private lateinit var imageView: ImageView
     private lateinit var movieTitle: TextView
@@ -70,7 +79,10 @@ class DetailsActivity : AppCompatActivity() {
 
         getMovieById(movieId)
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
     fun markAsFav(info: FavMovieInfo, sessionId: String?) {
         try {
                 RetrofitService.getMovieApi().addFavList(info, sessionId)
@@ -130,15 +142,8 @@ class DetailsActivity : AppCompatActivity() {
 
 
     private fun getMovieById(movieId: Int) {
-        RetrofitService.getMovieApi().getMovieById(movieId)
-            .enqueue(object : Callback<MoviesData> {
-                override fun onFailure(call: Call<MoviesData>, t: Throwable) {
-                    Log.e("Error", "Error")
-                }
-                override fun onResponse(
-                    call: Call<MoviesData>,
-                    response: Response<MoviesData>
-                ) {
+        launch {
+       var response = RetrofitService.getMovieApi().getMovieById(movieId)
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         Log.d("Check", responseBody?.title ?: "google")
@@ -190,7 +195,6 @@ class DetailsActivity : AppCompatActivity() {
                                 .into(movie_poster);
                         }
                     }
-                }
-            })
+            }
     }
 }

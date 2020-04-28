@@ -7,16 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinema.api.model.Login
 import com.example.cinema.api.model.RequestSessionId
-import com.example.cinema.api.model.SessionId
 import com.example.cinema.api.model.Token
 import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
 
 class AuthActivity : AppCompatActivity(), CoroutineScope {
@@ -27,14 +23,11 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
         pref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
         getToken()
         login_button.setOnClickListener {
             login()
         }
-
-
     }
 
     override fun onDestroy() {
@@ -89,38 +82,29 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
     }
 
     fun getSessionId() {
+        launch {
         var token = pref.getString(TOKEN_KEY, "error")
-        var requestSessionId: RequestSessionId =
-            RequestSessionId(token)
+        var requestSessionId: RequestSessionId = RequestSessionId(token)
         Log.d("get token on session id", pref.getString(TOKEN_KEY, ""))
         if (token != "error") {
-            var call: Call<SessionId> = RetrofitService.getMovieApi().getSessionId(requestSessionId)
-            call.enqueue(object : Callback<SessionId> {
-                override fun onFailure(call: Call<SessionId>, t: Throwable) {
-                    Toast.makeText(this@AuthActivity, "ERROR WITH CONNECTION", Toast.LENGTH_SHORT)
-                        .show()
-                }
+            var response = RetrofitService.getMovieApi().getSessionId(requestSessionId)
+            if (response.isSuccessful == true) {
+                Log.d("sessionID", response.body()?.sessionId.toString())
+                val edt = pref.edit()
+                edt.putString("sessionID", response.body()?.sessionId)
+                edt.apply()
+                Log.d("second check", pref.getString("sessionID", "empty 2").toString())
+            } else {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Login or password is not correct",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.d("session id", response.body()?.sessionId)
+            }
 
-                override fun onResponse(call: Call<SessionId>, response: Response<SessionId>) {
-                    if (response.body()?.success == true) {
-                        Log.d("pusk2", response.body()?.sessionId.toString())
-                        val edt = pref.edit()
-                        edt.putString("sessionID", response.body()?.sessionId)
-                        edt.apply()
-                        Log.d("second check", pref.getString("sessionID", "empty 2").toString())
-                    } else {
-                        Toast.makeText(
-                            this@AuthActivity,
-                            "Login or password is not correct",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d("session id", response.body()?.sessionId)
-                    }
-                }
-            })
+        }
         }
     }
-
-
 }
 

@@ -37,9 +37,9 @@ open class MoviesFragment: Fragment(), CoroutineScope {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var rootView: View
     private lateinit var picture:ImageView
-    val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
-    private lateinit var movie_post:ImageView
     var movieDao: MovieDao? = null
+
+    private lateinit var mov: List<MoviesData>
 
     private val job = Job()
 
@@ -63,14 +63,8 @@ open class MoviesFragment: Fragment(), CoroutineScope {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_movies, container, false)
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutMovie)
-
-        /*
-        getPopularMovies(
-            onSuccess = :: onPopularMoviesFetched,
-            onError =  :: onError
-        )
-         */
         movieDao = MovieDatabase.getDatabase(requireContext()).movieDao()
+
         getMoviesCoroutine()
         swipeRefreshLayout.setOnRefreshListener {
             recyclerView.layoutManager = GridLayoutManager(
@@ -82,12 +76,6 @@ open class MoviesFragment: Fragment(), CoroutineScope {
             moviesAdapter?.notifyDataSetChanged()
 
             getMoviesCoroutine()
-            /*
-            getPopularMovies(
-                onSuccess = :: onPopularMoviesFetched,
-                onError =  :: onError
-            )
-             */
         }
         return rootView
 
@@ -129,69 +117,20 @@ open class MoviesFragment: Fragment(), CoroutineScope {
         recyclerView.adapter = moviesAdapter
         moviesAdapter?.notifyDataSetChanged()
     }
-/*
-    private fun getPopularMovies(
 
-        page: Int = 10,
-        onSuccess: (movies: List<MoviesData>) -> Unit,
-        onError: () -> Unit
-
-
-    ) {
-        swipeRefreshLayout.isRefreshing = true
-        RetrofitService.getMovieApi().getPopularMovies(page = page)
-            .enqueue(object : Callback<MovieResponse> {
-                override fun onResponse(
-                    call: Call<MovieResponse>,
-                    response: Response<MovieResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-
-                        if (responseBody != null) {
-                            moviesAdapter?.clear()
-                            onSuccess.invoke(responseBody.movies)
-                            moviesAdapter?.notifyDataSetChanged()
-
-
-                        } else {
-                            onError.invoke()
-                        }
-                    } else {
-                        onError.invoke()
-                    }
-                    swipeRefreshLayout.isRefreshing = false;
-                }
-                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                    onError.invoke()
-                }
-            })
-    }
-
-
-
-
-
-    private fun onPopularMoviesFetched(movies: List<MoviesData>) {
-        moviesAdapter?.addItems(movies as ArrayList<MoviesData>)
-    }
-
-    private fun onError() {
-      Log.e("Error", "Error")
-    }
- */
     private fun getMoviesCoroutine() {
         launch {
             swipeRefreshLayout.isRefreshing = true
             val list = withContext(Dispatchers.IO) {
                 try {
-                    val response = RetrofitService.getMovieApi().getPopularMoviesCoroutine(10)
+                    val response = RetrofitService.getMovieApi().getPopularMoviesCoroutine()
                     if (response?.isSuccessful!!) {
                         val result = response.body()
-                        if (!result?.movies.isNullOrEmpty()) {
-                            movieDao?.insertAll(result!!.movies)
+                        if (!result?.results.isNullOrEmpty()) {
+                            Log.d("fav movies", "115")
+                            movieDao?.insertAll(result!!.results)
                         }
-                        result?.movies
+                        result?.results
                     } else {
                         movieDao?.getAll() ?: emptyList<MoviesData>()
                     }
@@ -199,8 +138,7 @@ open class MoviesFragment: Fragment(), CoroutineScope {
                     movieDao?.getAll() ?: emptyList<MoviesData>()
                 }
             }
-            moviesAdapter?.clear()
-            moviesAdapter?.addItems(list as ArrayList<MoviesData>)
+            moviesAdapter?.addItems(list as List<MoviesData>)
             moviesAdapter?.notifyDataSetChanged()
             swipeRefreshLayout.isRefreshing = false
         }

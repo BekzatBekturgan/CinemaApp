@@ -29,7 +29,7 @@ class MoviesAdapter: BaseRecyclerViewAdapter<MoviesData>(){
             itemView.setOnClickListener(this)
         }
         fun bind (movie: MoviesData) {
-            itemView.itemMovieTitle.text = movie?.originalTitle
+            itemView.itemMovieTitle.text = movie?.title
             itemView.overview.text = movie?.overview
 
             Glide.with(itemView)

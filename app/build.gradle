@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    aaptOptions { cruncherEnabled = false }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     compileOptions {

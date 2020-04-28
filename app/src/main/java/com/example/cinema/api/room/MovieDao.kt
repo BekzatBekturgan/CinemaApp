@@ -11,6 +11,6 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<MoviesData>)
 
-    @Query("Select * from movie_table ")
+    @Query("Select * from movie_table")
     fun getAll(): List<MoviesData>
 }

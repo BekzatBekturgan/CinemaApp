@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.cinema.api.model.AccountDetails
 import com.example.cinema.api.model.FavouriteMovies
+import com.example.cinema.api.model.MoviesData
 
-@Database(entities = [AccountDetails::class, FavouriteMovies::class, MovieDatabase::class], version = 1)
+@Database(entities = [AccountDetails::class, FavouriteMovies::class, MoviesData::class], version = 1)
 abstract class AccountDetailsDatabase : RoomDatabase(){
 
     abstract fun accountDetailsDao(): AccountDetailsDao

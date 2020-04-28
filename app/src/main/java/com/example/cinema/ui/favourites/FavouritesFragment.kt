@@ -109,7 +109,9 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                     val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
                     if (response?.isSuccessful!!) {
                         val result = response.body()
+                        //Log.d("fav result size", result!!.results.size.toString())
                         if (!result?.results.isNullOrEmpty()) {
+                            Log.d("fav movies", "115")
                             favMovieDao?.insertAll(result!!.results)
                         }
                         result?.results

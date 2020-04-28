@@ -14,7 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.cinema.*
 import com.example.cinema.api.model.FavouriteMovies
 import com.example.cinema.api.room.FavouriteDao
-import com.example.cinema.api.room.FavouriteDatabase
+import com.example.cinema.api.room.MovieDatabase
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -51,9 +51,7 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout)
         sessionId = pref.getString("sessionID", "empty")
 
-        Log.d("oncreateviewsessinid", sessionId)
-
-        favMovieDao = FavouriteDatabase.getDatabase(requireContext()).favMoviesDao()
+        favMovieDao = MovieDatabase.getDatabase(requireContext()).favMoviesDao()
         getFavouriteMoviesCoroutine()
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -109,7 +107,6 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                     val response = RetrofitService.getMovieApi().getFavouriteMoviesCoroutine(sessionId)
                     if (response?.isSuccessful!!) {
                         val result = response.body()
-                        //Log.d("fav result size", result!!.results.size.toString())
                         if (!result?.results.isNullOrEmpty()) {
                             Log.d("fav movies", "115")
                             favMovieDao?.insertAll(result!!.results)
@@ -119,7 +116,6 @@ open class FavouritesFragment: Fragment(), CoroutineScope {
                         favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                     }
                 } catch (e: Exception) {
-                    Log.e("favourtite database", e.toString())
                     favMovieDao?.getAll() ?: emptyList<FavouriteMovies>()
                 }
             }

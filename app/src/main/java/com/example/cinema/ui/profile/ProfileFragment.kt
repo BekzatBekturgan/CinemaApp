@@ -11,7 +11,7 @@ import com.example.cinema.R
 import com.example.cinema.RetrofitService
 import com.example.cinema.api.model.AccountDetails
 import com.example.cinema.api.room.AccountDetailsDao
-import com.example.cinema.api.room.AccountDetailsDatabase
+import com.example.cinema.api.room.MovieDatabase
 import com.example.cinema.pref
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -43,7 +43,7 @@ class ProfileFragment: Fragment(), CoroutineScope {
         rootView = inflater.inflate(R.layout.fragment_profiles, container, false)
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProfile)
         getAccountDetailsCoroutine()
-        accountDetailsDao = AccountDetailsDatabase.getDatabase(requireActivity()).accountDetailsDao()
+        accountDetailsDao = MovieDatabase.getDatabase(requireActivity()).accountDetailsDao()
         swipeRefreshLayout.setOnRefreshListener {
             getAccountDetailsCoroutine()
         }

@@ -12,6 +12,8 @@ import com.example.cinema.api.model.MoviesData
 abstract class MovieDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
+    abstract fun favMoviesDao(): FavouriteDao
+    abstract fun accountDetailsDao(): AccountDetailsDao
 
     companion object {
         var INSTANCE: MovieDatabase? = null

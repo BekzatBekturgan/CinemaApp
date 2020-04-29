@@ -9,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitService {
-
     const val BASE_URL = "https://api.themoviedb.org/3/"
     private lateinit var movieApi: UserClient
     fun getMovieApi(): UserClient {

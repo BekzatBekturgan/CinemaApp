@@ -2,18 +2,16 @@ package com.example.cinema.ui.favourites
 
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cinema.ui.favourites.OnItemClickListner
+import com.example.cinema.api.model.FavouriteMovies
+import com.example.cinema.api.model.MoviesData
 
 abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: ArrayList<T>? = ArrayList<T>()
     protected var itemClickListener: OnItemClickListner? = null
 
-
-    fun addItems(items: ArrayList<T>) {
+    fun addItems(items: List<T>) {
         this.list?.addAll(items)
         reload()
     }
@@ -36,5 +34,4 @@ abstract class BaseRecyclerViewAdapter<T>: RecyclerView.Adapter<RecyclerView.Vie
     private fun reload() {
         Handler(Looper.getMainLooper()).post { notifyDataSetChanged() }
     }
-
 }
